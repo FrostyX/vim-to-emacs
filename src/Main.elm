@@ -36,7 +36,20 @@ type alias Model =
 init : Model
 init =
     [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)"
-    , Option "set showmatch" "bar"
+    , Option "set nofoldenable" "TODO"
+    , Option "set autowrite" "TODO"
+    , Option "set showmatch" "TODO"
+    , Option "set tabstop=4" "TODO"
+    , Option "set shiftwidth=4" "TODO"
+    , Option "set softtabstop=4" "TODO"
+    , Option "set autoindent" "TODO"
+    , Option "set smartindent" "TODO"
+    , Option "set scrolloff=5" "TODO"
+    , Option "set pastetoggle=<F2>" "TODO NOOP"
+    , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO"
+    , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO"
+    , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO"
+    , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO"
     ]
 
 
