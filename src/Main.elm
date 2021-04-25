@@ -56,14 +56,9 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div []
-            [ text
-                (case List.head model of
-                    Nothing ->
-                        "There is no option defined"
+        (List.map viewOption model)
 
-                    Just option ->
-                        "Convert " ++ option.vim ++ " to " ++ option.emacs
-                )
-            ]
-        ]
+
+viewOption : Option -> Html Msg
+viewOption option =
+    text ("Convert " ++ option.vim ++ " to " ++ option.emacs)
