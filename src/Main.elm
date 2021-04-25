@@ -23,13 +23,21 @@ main =
 -- MODEL
 
 
+type alias Option =
+    { vim : String
+    , emacs : String
+    }
+
+
 type alias Model =
-    Int
+    List Option
 
 
 init : Model
 init =
-    0
+    [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)"
+    , Option "set showmatch" "bar"
+    ]
 
 
 type Msg
@@ -48,7 +56,14 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ button [] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
-        , button [] [ text "+" ]
+        [ div []
+            [ text
+                (case List.head model of
+                    Nothing ->
+                        "There is no option defined"
+
+                    Just option ->
+                        "Convert " ++ option.vim ++ " to " ++ option.emacs
+                )
+            ]
         ]
