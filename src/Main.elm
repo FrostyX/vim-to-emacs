@@ -86,8 +86,12 @@ viewOption : Option -> Html Msg
 viewOption option =
     div []
         [ h3 [] [ text option.vim ]
-        , p [] [ text "Some description" ]
+        , p [] [ text "Some description of the Vim command" ]
+        , p [] [ text "Vim configuration" ]
+        , pre [] [ text option.vim ]
+        , p [] [ text "Emacs configuration" ]
         , pre [] [ text option.emacs ]
+        , p [] [ text "Some note about incompatibility or something" ]
         ]
 
 
