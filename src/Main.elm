@@ -7,7 +7,8 @@ module Main exposing (..)
 --
 
 import Browser
-import Html exposing (Html, button, div, h1, h3, p, pre, table, td, text, th, thead, tr)
+import Html exposing (Html, button, div, h1, h3, input, p, pre, table, td, text, th, thead, tr)
+import Html.Attributes exposing (name, value)
 import Html.Events exposing (onClick)
 
 
@@ -89,6 +90,7 @@ viewOption option =
         [ h3 [] [ text option.vim ]
         , p [] [ text "Some description of the Vim command" ]
         , p [] [ text "Vim configuration" ]
+        , viewInput option
         , pre [] [ text (parameterizedVimOption option.vim option.param) ]
         , p [] [ text "Emacs configuration" ]
         , pre [] [ text option.emacs ]
@@ -97,13 +99,31 @@ viewOption option =
 
 
 parameterizedVimOption : String -> Maybe String -> String
-parameterizedVimOption vim value =
-    case value of
+parameterizedVimOption vim param =
+    case param of
         Nothing ->
             vim
 
         Just x ->
             vim ++ "=" ++ x
+
+
+uniqName : Option -> String
+uniqName option =
+    String.replace " " "-" option.vim
+
+
+viewInput : Option -> Html Msg
+viewInput option =
+    case option.param of
+        Nothing ->
+            text ""
+
+        Just x ->
+            p []
+                [ text "This option accepts a parameter: "
+                , input [ name (uniqName option), value x ] []
+                ]
 
 
 viewTable : Model -> Html Msg
