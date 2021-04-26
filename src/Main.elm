@@ -7,7 +7,7 @@ module Main exposing (..)
 --
 
 import Browser
-import Html exposing (Html, button, div, table, td, text, th, thead, tr)
+import Html exposing (Html, button, div, h1, h3, p, pre, table, td, text, th, thead, tr)
 import Html.Events exposing (onClick)
 
 
@@ -68,6 +68,31 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
+    div []
+        [ viewTable model
+        , viewOptionSections model
+        ]
+
+
+viewOptionSections : Model -> Html Msg
+viewOptionSections model =
+    div []
+        ([ h1 [] [ text "Vim options" ] ]
+            ++ List.map viewOption model
+        )
+
+
+viewOption : Option -> Html Msg
+viewOption option =
+    div []
+        [ h3 [] [ text option.vim ]
+        , p [] [ text "Some description" ]
+        , pre [] [ text option.emacs ]
+        ]
+
+
+viewTable : Model -> Html Msg
+viewTable model =
     table []
         (List.concat
             [ [ thead []
@@ -75,13 +100,13 @@ view model =
                     , th [] [ text "Emacs" ]
                     ]
               ]
-            , List.map viewOption model
+            , List.map viewOptionRow model
             ]
         )
 
 
-viewOption : Option -> Html Msg
-viewOption option =
+viewOptionRow : Option -> Html Msg
+viewOptionRow option =
     tr []
         [ td [] [ text option.vim ]
         , td [] [ text option.emacs ]
