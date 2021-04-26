@@ -26,6 +26,7 @@ main =
 type alias Option =
     { vim : String
     , emacs : String
+    , param : Maybe String
     }
 
 
@@ -35,21 +36,21 @@ type alias Model =
 
 init : Model
 init =
-    [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)"
-    , Option "set nofoldenable" "TODO"
-    , Option "set autowrite" "TODO"
-    , Option "set showmatch" "TODO"
-    , Option "set tabstop=4" "TODO"
-    , Option "set shiftwidth=4" "TODO"
-    , Option "set softtabstop=4" "TODO"
-    , Option "set autoindent" "TODO"
-    , Option "set smartindent" "TODO"
-    , Option "set scrolloff=5" "TODO"
-    , Option "set pastetoggle=<F2>" "TODO NOOP"
-    , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO"
-    , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO"
-    , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO"
-    , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO"
+    [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing
+    , Option "set nofoldenable" "TODO" Nothing
+    , Option "set autowrite" "TODO" Nothing
+    , Option "set showmatch" "TODO" Nothing
+    , Option "set tabstop" "TODO" (Just "4")
+    , Option "set shiftwidth" "TODO" (Just "4")
+    , Option "set softtabstop" "TODO" (Just "4")
+    , Option "set autoindent" "TODO" Nothing
+    , Option "set smartindent" "TODO" Nothing
+    , Option "set scrolloff" "TODO" (Just "5")
+    , Option "set pastetoggle" "TODO NOOP" (Just "<F2>")
+    , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing
+    , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing
+    , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing
+    , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing
     ]
 
 
@@ -88,11 +89,21 @@ viewOption option =
         [ h3 [] [ text option.vim ]
         , p [] [ text "Some description of the Vim command" ]
         , p [] [ text "Vim configuration" ]
-        , pre [] [ text option.vim ]
+        , pre [] [ text (parameterizedVimOption option.vim option.param) ]
         , p [] [ text "Emacs configuration" ]
         , pre [] [ text option.emacs ]
         , p [] [ text "Some note about incompatibility or something" ]
         ]
+
+
+parameterizedVimOption : String -> Maybe String -> String
+parameterizedVimOption vim value =
+    case value of
+        Nothing ->
+            vim
+
+        Just x ->
+            vim ++ "=" ++ x
 
 
 viewTable : Model -> Html Msg
