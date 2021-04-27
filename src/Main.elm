@@ -12,8 +12,8 @@ import Bootstrap.Card as Card
 import Bootstrap.Card.Block as Block
 import Bootstrap.Grid as Grid
 import Browser
-import Html exposing (Html, button, div, h1, h2, h3, input, p, pre, table, td, text, th, thead, tr)
-import Html.Attributes exposing (href, name, value)
+import Html exposing (Html, a, button, div, h1, h2, h3, input, p, pre, table, td, text, th, thead, tr)
+import Html.Attributes exposing (attribute, class, href, id, name, value)
 import Html.Events exposing (onClick)
 
 
@@ -97,8 +97,24 @@ viewOptionSections model =
 viewOption : Option -> Html Msg
 viewOption option =
     Card.config []
-        |> Card.headerH3 [] [ text option.vim ]
-        |> Card.block []
+        |> Card.header []
+            [ a
+                [ href "#collapse-example-1"
+                , id "heading-example-1"
+                , class "d-block"
+                , attribute "aria-expanded" "true"
+                , attribute "aria-controls" "collapse-example-1"
+                ]
+                [ h3 [] [ text option.vim ]
+                ]
+            ]
+        |> Card.block
+            [ Block.attrs
+                [ id "collapse-example-1"
+                , class "collapse show"
+                , attribute "aria-labelledby" "heading-example-1"
+                ]
+            ]
             [ Block.text []
                 [ text "Some description of the Vim command" ]
             , Block.text []
