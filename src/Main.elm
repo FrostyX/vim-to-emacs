@@ -6,11 +6,14 @@ module Main exposing (..)
 --   https://guide.elm-lang.org/architecture/buttons.html
 --
 
+import Bootstrap.Button as Button
 import Bootstrap.CDN as CDN
+import Bootstrap.Card as Card
+import Bootstrap.Card.Block as Block
 import Bootstrap.Grid as Grid
 import Browser
 import Html exposing (Html, button, div, h1, h2, h3, input, p, pre, table, td, text, th, thead, tr)
-import Html.Attributes exposing (name, value)
+import Html.Attributes exposing (href, name, value)
 import Html.Events exposing (onClick)
 
 
@@ -93,16 +96,22 @@ viewOptionSections model =
 
 viewOption : Option -> Html Msg
 viewOption option =
-    div []
-        [ h3 [] [ text option.vim ]
-        , p [] [ text "Some description of the Vim command" ]
-        , p [] [ text "Vim configuration" ]
-        , viewInput option
-        , pre [] [ text (parameterizedVimOption option.vim option.param) ]
-        , p [] [ text "Emacs configuration" ]
-        , pre [] [ text option.emacs ]
-        , p [] [ text "Some note about incompatibility or something" ]
-        ]
+    Card.config []
+        |> Card.headerH3 [] [ text option.vim ]
+        |> Card.block []
+            [ Block.text []
+                [ text "Some description of the Vim command" ]
+            , Block.text []
+                [ text "Vim configuration" ]
+            , Block.custom <| viewInput option
+            , Block.custom <| pre [] [ text (parameterizedVimOption option.vim option.param) ]
+            , Block.text []
+                [ text "Emacs configuration" ]
+            , Block.custom <| pre [] [ text option.emacs ]
+            , Block.text []
+                [ text "Some note about incompatibility or something" ]
+            ]
+        |> Card.view
 
 
 parameterizedVimOption : String -> Maybe String -> String
