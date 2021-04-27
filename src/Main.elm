@@ -6,8 +6,10 @@ module Main exposing (..)
 --   https://guide.elm-lang.org/architecture/buttons.html
 --
 
+import Bootstrap.CDN as CDN
+import Bootstrap.Grid as Grid
 import Browser
-import Html exposing (Html, button, div, h1, h3, input, p, pre, table, td, text, th, thead, tr)
+import Html exposing (Html, button, div, h1, h2, h3, input, p, pre, table, td, text, th, thead, tr)
 import Html.Attributes exposing (name, value)
 import Html.Events exposing (onClick)
 
@@ -70,16 +72,21 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ viewTable model
-        , viewOptionSections model
+    Grid.container []
+        [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
+        , Grid.row []
+            [ Grid.col []
+                [ h1 [] [ text "Vim to Emacs" ]
+                , viewOptionSections model
+                ]
+            ]
         ]
 
 
 viewOptionSections : Model -> Html Msg
 viewOptionSections model =
     div []
-        ([ h1 [] [ text "Vim options" ] ]
+        ([ h2 [] [ text "Vim options" ] ]
             ++ List.map viewOption model
         )
 
