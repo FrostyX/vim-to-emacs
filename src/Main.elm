@@ -6,6 +6,7 @@ module Main exposing (..)
 --   https://guide.elm-lang.org/architecture/buttons.html
 --
 
+import Bootstrap.Accordion as Accordion
 import Bootstrap.Button as Button
 import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
@@ -22,7 +23,17 @@ import Html.Events exposing (onClick)
 
 
 main =
-    Browser.sandbox { init = init, update = update, view = view }
+    Browser.element
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Accordion.subscriptions model.accordionState AccordionMsg
 
 
 
@@ -37,38 +48,47 @@ type alias Option =
 
 
 type alias Model =
-    { options : List Option }
-
-
-init : Model
-init =
-    { options =
-        [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing
-        , Option "set nofoldenable" "TODO" Nothing
-        , Option "set autowrite" "TODO" Nothing
-        , Option "set showmatch" "TODO" Nothing
-        , Option "set tabstop" "TODO" (Just "4")
-        , Option "set shiftwidth" "TODO" (Just "4")
-        , Option "set softtabstop" "TODO" (Just "4")
-        , Option "set autoindent" "TODO" Nothing
-        , Option "set smartindent" "TODO" Nothing
-        , Option "set scrolloff" "TODO" (Just "5")
-        , Option "set pastetoggle" "TODO NOOP" (Just "<F2>")
-        , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing
-        , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing
-        , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing
-        , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing
-        ]
+    { options : List Option
+    , accordionState : Accordion.State
     }
 
 
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( { options =
+            [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing
+            , Option "set nofoldenable" "TODO" Nothing
+            , Option "set autowrite" "TODO" Nothing
+            , Option "set showmatch" "TODO" Nothing
+            , Option "set tabstop" "TODO" (Just "4")
+            , Option "set shiftwidth" "TODO" (Just "4")
+            , Option "set softtabstop" "TODO" (Just "4")
+            , Option "set autoindent" "TODO" Nothing
+            , Option "set smartindent" "TODO" Nothing
+            , Option "set scrolloff" "TODO" (Just "5")
+            , Option "set pastetoggle" "TODO NOOP" (Just "<F2>")
+            , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing
+            , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing
+            , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing
+            , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing
+            ]
+      , accordionState = Accordion.initialState
+      }
+    , Cmd.none
+    )
+
+
 type Msg
-    = NoOp
+    = AccordionMsg Accordion.State
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    model
+    case msg of
+        AccordionMsg state ->
+            ( { model | accordionState = state }
+            , Cmd.none
+            )
 
 
 
@@ -91,45 +111,39 @@ view model =
 viewOptionSections : Model -> Html Msg
 viewOptionSections model =
     div []
-        ([ h2 [] [ text "Vim options" ] ]
-            ++ List.map viewOption model.options
-        )
+        [ h2 [] [ text "Vim options" ]
+        , Accordion.config AccordionMsg
+            |> Accordion.withAnimation
+            |> Accordion.cards (List.map viewOption model.options)
+            |> Accordion.view model.accordionState
+        ]
 
 
-viewOption : Option -> Html Msg
+viewOption : Option -> Accordion.Card Msg
 viewOption option =
-    Card.config []
-        |> Card.header []
-            [ a
-                [ href "#collapse-example-1"
-                , id "heading-example-1"
-                , class "d-block"
-                , attribute "aria-expanded" "true"
-                , attribute "aria-controls" "collapse-example-1"
-                ]
-                [ h3 [] [ text option.vim ]
+    Accordion.card
+        { id = option.vim
+        , options = []
+        , header =
+            Accordion.header [] <|
+                Accordion.toggle []
+                    [ h3 [] [ text option.vim ] ]
+        , blocks =
+            [ Accordion.block []
+                [ Block.text []
+                    [ text "Some description of the Vim command" ]
+                , Block.text []
+                    [ text "Vim configuration" ]
+                , Block.custom <| viewInput option
+                , Block.custom <| pre [] [ text (parameterizedVimOption option.vim option.param) ]
+                , Block.text []
+                    [ text "Emacs configuration" ]
+                , Block.custom <| pre [] [ text option.emacs ]
+                , Block.text []
+                    [ text "Some note about incompatibility or something" ]
                 ]
             ]
-        |> Card.block
-            [ Block.attrs
-                [ id "collapse-example-1"
-                , class "collapse show"
-                , attribute "aria-labelledby" "heading-example-1"
-                ]
-            ]
-            [ Block.text []
-                [ text "Some description of the Vim command" ]
-            , Block.text []
-                [ text "Vim configuration" ]
-            , Block.custom <| viewInput option
-            , Block.custom <| pre [] [ text (parameterizedVimOption option.vim option.param) ]
-            , Block.text []
-                [ text "Emacs configuration" ]
-            , Block.custom <| pre [] [ text option.emacs ]
-            , Block.text []
-                [ text "Some note about incompatibility or something" ]
-            ]
-        |> Card.view
+        }
 
 
 parameterizedVimOption : String -> Maybe String -> String
