@@ -13,7 +13,16 @@ import Bootstrap.Card as Card
 import Bootstrap.Card.Block as Block
 import Bootstrap.Grid as Grid
 import Browser
-import Html exposing (Html, a, button, div, h1, h2, h3, input, p, pre, table, td, text, th, thead, tr)
+import FontAwesome.Attributes as Icon
+import FontAwesome.Brands as Icon
+import FontAwesome.Icon as Icon exposing (Icon)
+import FontAwesome.Layering as Icon
+import FontAwesome.Regular as RegularIcon
+import FontAwesome.Solid as Icon
+import FontAwesome.Styles as Icon
+import FontAwesome.Svg as SvgIcon
+import FontAwesome.Transforms as Icon
+import Html exposing (Html, a, button, div, h1, h2, h3, i, input, p, pre, span, table, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute, class, href, id, name, value)
 import Html.Events exposing (onClick)
 
@@ -101,6 +110,7 @@ view : Model -> Html Msg
 view model =
     Grid.container []
         [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
+        , Icon.css
         , Grid.row []
             [ Grid.col []
                 [ h1 [] [ text "Vim to Emacs" ]
@@ -134,12 +144,23 @@ viewOption option =
             [ Accordion.block []
                 [ Block.text []
                     [ text "Some description of the Vim command" ]
-                , Block.text []
-                    [ text "Vim configuration" ]
+                , Block.custom <|
+                    p []
+                        [ Icon.cross
+                            |> Icon.present
+                            |> Icon.transform [ Icon.rotate 180 ]
+                            |> Icon.styled [ Icon.lg ]
+                            |> Icon.view
+                        , text " Vim configuration"
+                        ]
                 , Block.custom <| viewInput option
-                , Block.custom <| pre [] [ text (parameterizedVimOption option.vim option.param) ]
-                , Block.text []
-                    [ text "Emacs configuration" ]
+                , Block.custom <|
+                    pre [] [ text (parameterizedVimOption option.vim option.param) ]
+                , Block.custom <|
+                    p []
+                        [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
+                        , text " Emacs configuration"
+                        ]
                 , Block.custom <| pre [] [ text option.emacs ]
                 , Block.text []
                     [ text "Some note about incompatibility or something" ]
