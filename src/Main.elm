@@ -72,7 +72,9 @@ init _ =
             , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing
             , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing
             ]
-      , accordionState = Accordion.initialState
+
+      -- Use `Accordion.initialState` to have everything collapsed
+      , accordionState = Accordion.initialStateCardOpen "set nofoldenable"
       }
     , Cmd.none
     )
