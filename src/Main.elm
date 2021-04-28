@@ -49,10 +49,18 @@ subscriptions model =
 -- MODEL
 
 
+type Status
+    = Compatible
+    | NOOP
+    | Incompatible
+    | Unknown
+
+
 type alias Option =
     { vim : String
     , emacs : String
     , param : Maybe String
+    , status : Status
     }
 
 
@@ -65,21 +73,22 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { options =
-            [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing
-            , Option "set nofoldenable" "TODO" Nothing
-            , Option "set autowrite" "TODO" Nothing
-            , Option "set showmatch" "TODO" Nothing
-            , Option "set tabstop" "TODO" (Just "4")
-            , Option "set shiftwidth" "TODO" (Just "4")
-            , Option "set softtabstop" "TODO" (Just "4")
-            , Option "set autoindent" "TODO" Nothing
-            , Option "set smartindent" "TODO" Nothing
-            , Option "set scrolloff" "TODO" (Just "5")
-            , Option "set pastetoggle" "TODO NOOP" (Just "<F2>")
-            , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing
-            , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing
-            , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing
-            , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing
+            [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing Compatible
+            , Option "set nocompatible" "TODO" Nothing NOOP
+            , Option "set nofoldenable" "TODO" Nothing Unknown
+            , Option "set autowrite" "TODO" Nothing Unknown
+            , Option "set showmatch" "TODO" Nothing Unknown
+            , Option "set tabstop" "TODO" (Just "4") Unknown
+            , Option "set shiftwidth" "TODO" (Just "4") Unknown
+            , Option "set softtabstop" "TODO" (Just "4") Unknown
+            , Option "set autoindent" "TODO" Nothing Unknown
+            , Option "set smartindent" "TODO" Nothing Unknown
+            , Option "set scrolloff" "TODO" (Just "5") Unknown
+            , Option "set pastetoggle" "TODO NOOP" (Just "<F2>") Unknown
+            , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing Unknown
+            , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing Unknown
+            , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing Unknown
+            , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing Unknown
             ]
 
       -- Use `Accordion.initialState` to have everything collapsed
@@ -131,15 +140,41 @@ viewOptionSections model =
         ]
 
 
+viewOptionStatus : Option -> Html Msg
+viewOptionStatus option =
+    let
+        ( textClass, icon ) =
+            case option.status of
+                Compatible ->
+                    ( "text-success", Icon.check )
+
+                NOOP ->
+                    ( "text-info", Icon.smile )
+
+                Incompatible ->
+                    ( "text-danger", Icon.times )
+
+                Unknown ->
+                    ( "text-warning", Icon.exclamationTriangle )
+    in
+    span
+        [ class "float-right"
+        , class textClass
+        ]
+        [ icon |> Icon.viewStyled [ Icon.lg ] ]
+
+
 viewOption : Option -> Accordion.Card Msg
 viewOption option =
     Accordion.card
         { id = option.vim
         , options = []
         , header =
-            Accordion.header [] <|
+            (Accordion.header [] <|
                 Accordion.toggle []
                     [ h3 [] [ text option.vim ] ]
+            )
+                |> Accordion.appendHeader [ viewOptionStatus option ]
         , blocks =
             [ Accordion.block []
                 [ Block.text []
