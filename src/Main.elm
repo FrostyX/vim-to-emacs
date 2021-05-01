@@ -175,6 +175,7 @@ view model =
         , Grid.row []
             [ Grid.col []
                 [ h1 [] [ text "Vim to Emacs" ]
+                , viewJumbotron
                 , viewConvertor
                 , viewOptionSections model
                 ]
@@ -283,6 +284,11 @@ viewInput option =
                 [ text "This option accepts a parameter: "
                 , input [ name (uniqName option), value x, onInput SetOptionValue ] []
                 ]
+
+
+viewJumbotron : Html Msg
+viewJumbotron =
+    div [] [ text "Vim to Emacs migration made easy" ]
 
 
 viewConvertor : Html Msg
