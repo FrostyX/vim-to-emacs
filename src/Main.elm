@@ -93,6 +93,8 @@ type alias Option =
 type alias Model =
     { options : Array.Array Option
     , accordionState : Accordion.State
+    , vimConfig : String
+    , emacsConfig : String
     }
 
 
@@ -120,6 +122,21 @@ init _ =
 
       -- Use `Accordion.initialState` to have everything collapsed
       , accordionState = Accordion.initialStateCardOpen "set nofoldenable"
+      , vimConfig = "Foo"
+      , emacsConfig =
+            ";; Put this into init.el\n"
+                ++ "(use-package evil\n"
+                ++ "  :ensure t\n"
+                ++ "  :init\n"
+                ++ "  (setq evil-search-module 'evil-search)\n"
+                ++ "  (setq evil-ex-complete-emacs-commands nil)\n"
+                ++ "  (setq evil-vsplit-window-right t)\n"
+                ++ "  (setq evil-split-window-below t)\n"
+                ++ "  (setq evil-shift-round nil)\n"
+                ++ "  (setq evil-want-C-u-scroll t)\n"
+                ++ "  (setq evil-ex-set-initial-state 'normal)\n"
+                ++ "  :config\n"
+                ++ "  (evil-mode))\n"
       }
     , Cmd.none
     )
@@ -129,6 +146,7 @@ type Msg
     = AccordionMsg Accordion.State
       -- | SetOptionValue Int (Maybe String)
     | SetOptionValue String
+    | Convert String
 
 
 
@@ -142,6 +160,9 @@ update msg model =
             ( { model | accordionState = state }
             , Cmd.none
             )
+
+        Convert vimConfig ->
+            ( { model | emacsConfig = convertVimToEmacs vimConfig }, Cmd.none )
 
         SetOptionValue value ->
             let
@@ -163,6 +184,11 @@ update msg model =
                     ( { model | options = Array.set optionIndex updatedOption model.options }, Cmd.none )
 
 
+convertVimToEmacs : String -> String
+convertVimToEmacs vimConfig =
+    vimConfig |> String.toUpper
+
+
 
 -- VIEW
 
@@ -176,7 +202,7 @@ view model =
             [ Grid.col []
                 [ h1 [] [ text "Vim to Emacs" ]
                 , viewJumbotron
-                , viewConvertor
+                , viewConvertor model
                 , viewOptionSections model
                 ]
             ]
@@ -291,8 +317,8 @@ viewJumbotron =
     div [] [ text "Vim to Emacs migration made easy" ]
 
 
-viewConvertor : Html Msg
-viewConvertor =
+viewConvertor : Model -> Html Msg
+viewConvertor model =
     div []
         [ h2 [] [ text "Convert your config" ]
         , p [] [ text "Paste your existing Vim configuration and get it converted to Emacs Lisp code" ]
@@ -304,27 +330,12 @@ viewConvertor =
                     [ Textarea.textarea
                         [ Textarea.id "vim-config"
                         , Textarea.rows 11
+                        , Textarea.onInput Convert
                         ]
                     ]
                 , Grid.col
                     []
-                    [ pre []
-                        [ text
-                            (";; Put this into init.el\n"
-                                ++ "(use-package evil\n"
-                                ++ "  :ensure t\n"
-                                ++ "  :init\n"
-                                ++ "  (setq evil-search-module 'evil-search)\n"
-                                ++ "  (setq evil-ex-complete-emacs-commands nil)\n"
-                                ++ "  (setq evil-vsplit-window-right t)\n"
-                                ++ "  (setq evil-split-window-below t)\n"
-                                ++ "  (setq evil-shift-round nil)\n"
-                                ++ "  (setq evil-want-C-u-scroll t)\n"
-                                ++ "  (setq evil-ex-set-initial-state 'normal)\n"
-                                ++ "  :config\n"
-                                ++ "  (evil-mode))\n"
-                            )
-                        ]
+                    [ pre [] [ text model.emacsConfig ]
                     ]
                 ]
             ]
