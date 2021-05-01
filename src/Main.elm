@@ -12,7 +12,10 @@ import Bootstrap.Button as Button
 import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
 import Bootstrap.Card.Block as Block
+import Bootstrap.Form.Textarea as Textarea
 import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Col
+import Bootstrap.Grid.Row
 import Browser
 import FontAwesome.Attributes as Icon
 import FontAwesome.Brands as Icon
@@ -23,7 +26,28 @@ import FontAwesome.Solid as Icon
 import FontAwesome.Styles as Icon
 import FontAwesome.Svg as SvgIcon
 import FontAwesome.Transforms as Icon
-import Html exposing (Html, a, button, div, h1, h2, h3, i, input, p, pre, span, table, td, text, th, thead, tr)
+import Html
+    exposing
+        ( Html
+        , a
+        , button
+        , div
+        , h1
+        , h2
+        , h3
+        , i
+        , input
+        , p
+        , pre
+        , span
+        , table
+        , td
+        , text
+        , textarea
+        , th
+        , thead
+        , tr
+        )
 import Html.Attributes exposing (attribute, class, href, id, name, value)
 import Html.Events exposing (onClick, onInput)
 import Maybe
@@ -151,6 +175,7 @@ view model =
         , Grid.row []
             [ Grid.col []
                 [ h1 [] [ text "Vim to Emacs" ]
+                , viewConvertor
                 , viewOptionSections model
                 ]
             ]
@@ -258,3 +283,43 @@ viewInput option =
                 [ text "This option accepts a parameter: "
                 , input [ name (uniqName option), value x, onInput SetOptionValue ] []
                 ]
+
+
+viewConvertor : Html Msg
+viewConvertor =
+    div []
+        [ h2 [] [ text "Convert your config" ]
+        , p [] [ text "Paste your existing Vim configuration and get it converted to Emacs Lisp code" ]
+        , Grid.container []
+            [ Grid.row
+                []
+                [ Grid.col
+                    []
+                    [ Textarea.textarea
+                        [ Textarea.id "vim-config"
+                        , Textarea.rows 11
+                        ]
+                    ]
+                , Grid.col
+                    []
+                    [ pre []
+                        [ text
+                            (";; Put this into init.el\n"
+                                ++ "(use-package evil\n"
+                                ++ "  :ensure t\n"
+                                ++ "  :init\n"
+                                ++ "  (setq evil-search-module 'evil-search)\n"
+                                ++ "  (setq evil-ex-complete-emacs-commands nil)\n"
+                                ++ "  (setq evil-vsplit-window-right t)\n"
+                                ++ "  (setq evil-split-window-below t)\n"
+                                ++ "  (setq evil-shift-round nil)\n"
+                                ++ "  (setq evil-want-C-u-scroll t)\n"
+                                ++ "  (setq evil-ex-set-initial-state 'normal)\n"
+                                ++ "  :config\n"
+                                ++ "  (evil-mode))\n"
+                            )
+                        ]
+                    ]
+                ]
+            ]
+        ]
