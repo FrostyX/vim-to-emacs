@@ -6,6 +6,7 @@ module Main exposing (..)
 --   https://guide.elm-lang.org/architecture/buttons.html
 --
 
+import Array
 import Bootstrap.Accordion as Accordion
 import Bootstrap.Button as Button
 import Bootstrap.CDN as CDN
@@ -24,7 +25,8 @@ import FontAwesome.Svg as SvgIcon
 import FontAwesome.Transforms as Icon
 import Html exposing (Html, a, button, div, h1, h2, h3, i, input, p, pre, span, table, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute, class, href, id, name, value)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onInput)
+import Maybe
 
 
 
@@ -65,7 +67,7 @@ type alias Option =
 
 
 type alias Model =
-    { options : List Option
+    { options : Array.Array Option
     , accordionState : Accordion.State
     }
 
@@ -73,23 +75,24 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { options =
-            [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing Compatible
-            , Option "set nocompatible" "TODO" Nothing NOOP
-            , Option "set nofoldenable" "TODO" Nothing Unknown
-            , Option "set autowrite" "TODO" Nothing Unknown
-            , Option "set showmatch" "TODO" Nothing Unknown
-            , Option "set tabstop" "TODO" (Just "4") Unknown
-            , Option "set shiftwidth" "TODO" (Just "4") Unknown
-            , Option "set softtabstop" "TODO" (Just "4") Unknown
-            , Option "set autoindent" "TODO" Nothing Unknown
-            , Option "set smartindent" "TODO" Nothing Unknown
-            , Option "set scrolloff" "TODO" (Just "5") Unknown
-            , Option "set pastetoggle" "TODO NOOP" (Just "<F2>") Unknown
-            , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing Unknown
-            , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing Unknown
-            , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing Unknown
-            , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing Unknown
-            ]
+            Array.fromList
+                [ Option "set number" "(add-hook 'prog-mode-hook #'display-line-numbers-mode)" Nothing Compatible
+                , Option "set nocompatible" "TODO" Nothing NOOP
+                , Option "set nofoldenable" "TODO" Nothing Unknown
+                , Option "set autowrite" "TODO" Nothing Unknown
+                , Option "set showmatch" "TODO" Nothing Unknown
+                , Option "set tabstop" "TODO" (Just "4") Unknown
+                , Option "set shiftwidth" "TODO" (Just "4") Unknown
+                , Option "set softtabstop" "TODO" (Just "4") Unknown
+                , Option "set autoindent" "TODO" Nothing Unknown
+                , Option "set smartindent" "TODO" Nothing Unknown
+                , Option "set scrolloff" "TODO" (Just "5") Unknown
+                , Option "set pastetoggle" "TODO NOOP" (Just "<F2>") Unknown
+                , Option "nmap <silent> <c-k> :wincmd k<CR>" "TODO" Nothing Unknown
+                , Option "nmap <silent> <c-j> :wincmd j<CR>" "TODO" Nothing Unknown
+                , Option "nmap <silent> <c-h> :wincmd h<CR>" "TODO" Nothing Unknown
+                , Option "nmap <silent> <c-l> :wincmd l<CR>" "TODO" Nothing Unknown
+                ]
 
       -- Use `Accordion.initialState` to have everything collapsed
       , accordionState = Accordion.initialStateCardOpen "set nofoldenable"
@@ -100,6 +103,12 @@ init _ =
 
 type Msg
     = AccordionMsg Accordion.State
+      -- | SetOptionValue Int (Maybe String)
+    | SetOptionValue String
+
+
+
+-- | Change String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -109,6 +118,25 @@ update msg model =
             ( { model | accordionState = state }
             , Cmd.none
             )
+
+        SetOptionValue value ->
+            let
+                optionIndex =
+                    5
+
+                option =
+                    Array.get optionIndex model.options
+            in
+            case option of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just foundOption ->
+                    let
+                        updatedOption =
+                            { foundOption | param = Just value }
+                    in
+                    ( { model | options = Array.set optionIndex updatedOption model.options }, Cmd.none )
 
 
 
@@ -135,7 +163,7 @@ viewOptionSections model =
         [ h2 [] [ text "Vim options" ]
         , Accordion.config AccordionMsg
             |> Accordion.withAnimation
-            |> Accordion.cards (List.map viewOption model.options)
+            |> Accordion.cards (Array.map viewOption model.options |> Array.toList)
             |> Accordion.view model.accordionState
         ]
 
@@ -228,27 +256,5 @@ viewInput option =
         Just x ->
             p []
                 [ text "This option accepts a parameter: "
-                , input [ name (uniqName option), value x ] []
+                , input [ name (uniqName option), value x, onInput SetOptionValue ] []
                 ]
-
-
-viewTable : Model -> Html Msg
-viewTable model =
-    table []
-        (List.concat
-            [ [ thead []
-                    [ th [] [ text "Vim" ]
-                    , th [] [ text "Emacs" ]
-                    ]
-              ]
-            , List.map viewOptionRow model.options
-            ]
-        )
-
-
-viewOptionRow : Option -> Html Msg
-viewOptionRow option =
-    tr []
-        [ td [] [ text option.vim ]
-        , td [] [ text option.emacs ]
-        ]
