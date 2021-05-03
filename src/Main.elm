@@ -188,7 +188,7 @@ convertVimToEmacs : String -> Array.Array Option -> String
 convertVimToEmacs vimConfig options =
     vimConfig
         |> String.lines
-        |> List.filter (\x -> x /= "")
+        |> List.map removeComment
         |> List.map String.trim
         |> List.map (\x -> convertOption x options)
         |> String.join "\n"
@@ -196,12 +196,27 @@ convertVimToEmacs vimConfig options =
 
 convertOption : String -> Array.Array Option -> String
 convertOption configLine options =
-    case Array.filter (\option -> option.vim == configLine) options |> Array.get 0 of
-        Nothing ->
-            ";; Unknown alternative to " ++ configLine
+    if String.startsWith "#" configLine then
+        configLine
 
-        Just option ->
-            ";; " ++ configLine ++ "\n" ++ option.emacs ++ "\n"
+    else if String.filter (\x -> x /= ' ') configLine |> String.isEmpty then
+        configLine
+
+    else
+        case Array.filter (\option -> option.vim == configLine) options |> Array.get 0 of
+            Nothing ->
+                ";; Unknown alternative to " ++ configLine
+
+            Just option ->
+                ";; " ++ configLine ++ "\n" ++ option.emacs ++ "\n"
+
+
+removeComment : String -> String
+removeComment configLine =
+    configLine
+        |> String.split "#"
+        |> List.head
+        |> Maybe.withDefault ""
 
 
 
