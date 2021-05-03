@@ -108,7 +108,7 @@ init _ =
                 , Option "set autowrite" "TODO" Nothing Unknown
                 , Option "set showmatch" "TODO" Nothing Unknown
                 , Option "set tabstop" "TODO" (Just "4") Unknown
-                , Option "set shiftwidth" "TODO" (Just "4") Unknown
+                , Option "set shiftwidth" "(setq evil-shift-width 4)" (Just "4") Unknown
                 , Option "set softtabstop" "TODO" (Just "4") Unknown
                 , Option "set autoindent" "TODO" Nothing Unknown
                 , Option "set smartindent" "TODO" Nothing Unknown
@@ -203,12 +203,22 @@ convertOption configLine options =
         configLine
 
     else
-        case Array.filter (\option -> option.vim == configLine) options |> Array.get 0 of
+        let
+            split =
+                String.split "=" configLine |> Array.fromList |> Array.map String.trim
+
+            name =
+                split |> Array.get 0 |> Maybe.withDefault configLine
+
+            value =
+                split |> Array.get 1
+        in
+        case Array.filter (\option -> option.vim == name) options |> Array.get 0 of
             Nothing ->
                 ";; Unknown alternative to " ++ configLine
 
             Just option ->
-                ";; " ++ configLine ++ "\n" ++ option.emacs ++ "\n"
+                ";; " ++ configLine ++ "\n" ++ parameterizedEmacsOption option.emacs value ++ "\n"
 
 
 removeComment : String -> String
@@ -322,6 +332,16 @@ parameterizedVimOption vim param =
 
         Just x ->
             vim ++ "=" ++ x
+
+
+parameterizedEmacsOption : String -> Maybe String -> String
+parameterizedEmacsOption emacs param =
+    case param of
+        Nothing ->
+            emacs
+
+        Just value ->
+            emacs ++ " ;; The value of " ++ value ++ " should be here"
 
 
 uniqName : Option -> String
