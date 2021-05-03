@@ -51,6 +51,7 @@ import Html
 import Html.Attributes exposing (attribute, class, href, id, name, value)
 import Html.Events exposing (onClick, onInput)
 import Maybe
+import String.Interpolate exposing (interpolate)
 
 
 
@@ -108,7 +109,7 @@ init _ =
                 , Option "set autowrite" "TODO" Nothing Unknown
                 , Option "set showmatch" "TODO" Nothing Unknown
                 , Option "set tabstop" "TODO" (Just "4") Unknown
-                , Option "set shiftwidth" "(setq evil-shift-width 4)" (Just "4") Unknown
+                , Option "set shiftwidth" "(setq evil-shift-width {0})" (Just "4") Unknown
                 , Option "set softtabstop" "TODO" (Just "4") Unknown
                 , Option "set autoindent" "TODO" Nothing Unknown
                 , Option "set smartindent" "TODO" Nothing Unknown
@@ -188,7 +189,6 @@ convertVimToEmacs : String -> Array.Array Option -> String
 convertVimToEmacs vimConfig options =
     vimConfig
         |> String.lines
-        |> List.map removeComment
         |> List.map String.trim
         |> List.map (\x -> convertOption x options)
         |> String.join "\n"
@@ -218,7 +218,27 @@ convertOption configLine options =
                 ";; Unknown alternative to " ++ configLine
 
             Just option ->
-                ";; " ++ configLine ++ "\n" ++ parameterizedEmacsOption option.emacs value ++ "\n"
+                let
+                    missingValue =
+                        option.param /= Nothing && (value |> Maybe.withDefault "" |> String.isEmpty)
+
+                    defaultedValue =
+                        if missingValue then
+                            option.param
+
+                        else
+                            value |> Maybe.withDefault "" |> removeComment |> String.trim |> Just
+                in
+                (if missingValue then
+                    ";; Missing option value, using default\n"
+
+                 else
+                    ""
+                )
+                    ++ interpolate ";; {0}\n{1}\n"
+                        [ parameterizedVimOption option.vim defaultedValue
+                        , parameterizedEmacsOption option.emacs defaultedValue
+                        ]
 
 
 removeComment : String -> String
@@ -341,7 +361,7 @@ parameterizedEmacsOption emacs param =
             emacs
 
         Just value ->
-            emacs ++ " ;; The value of " ++ value ++ " should be here"
+            interpolate emacs [ value ]
 
 
 uniqName : Option -> String
