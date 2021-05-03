@@ -162,7 +162,7 @@ update msg model =
             )
 
         Convert vimConfig ->
-            ( { model | emacsConfig = convertVimToEmacs vimConfig }, Cmd.none )
+            ( { model | emacsConfig = convertVimToEmacs vimConfig model.options }, Cmd.none )
 
         SetOptionValue value ->
             let
@@ -184,9 +184,24 @@ update msg model =
                     ( { model | options = Array.set optionIndex updatedOption model.options }, Cmd.none )
 
 
-convertVimToEmacs : String -> String
-convertVimToEmacs vimConfig =
-    vimConfig |> String.toUpper
+convertVimToEmacs : String -> Array.Array Option -> String
+convertVimToEmacs vimConfig options =
+    vimConfig
+        |> String.lines
+        |> List.filter (\x -> x /= "")
+        |> List.map String.trim
+        |> List.map (\x -> convertOption x options)
+        |> String.join "\n"
+
+
+convertOption : String -> Array.Array Option -> String
+convertOption configLine options =
+    case Array.filter (\option -> option.vim == configLine) options |> Array.get 0 of
+        Nothing ->
+            ";; Unknown alternative to " ++ configLine
+
+        Just option ->
+            ";; " ++ configLine ++ "\n" ++ option.emacs ++ "\n"
 
 
 
