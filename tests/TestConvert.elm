@@ -17,12 +17,20 @@ options =
 testConvertOption : Test
 testConvertOption =
     describe "Test converting one config line"
-        [ -- TODO Convert # to ;;
+        [ --
           test "Test comment" <|
             \_ ->
                 Expect.equal
                     (convertOption "# Some comment" options)
-                    ";; # Some comment"
+                    ";; Some comment"
+
+        -- It would be nice if this test worked in an `Expect.equal` manner but
+        -- it is not necesary since we can be sure to pass only trimmed String
+        , test "Test comment with excesive whitespace" <|
+            \_ ->
+                Expect.notEqual
+                    (convertOption "   #     Some comment" options)
+                    ";; Some comment"
 
         --
         , test "Test unknown option" <|

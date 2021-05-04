@@ -197,7 +197,7 @@ convertVimToEmacs vimConfig options =
 convertOption : String -> Array.Array Option -> String
 convertOption configLine options =
     if String.startsWith "#" configLine then
-        ";; " ++ configLine
+        ";; " ++ removeCommentSigns configLine
 
     else if String.filter (\x -> x /= ' ') configLine |> String.isEmpty then
         configLine
@@ -247,6 +247,15 @@ removeComment configLine =
         |> String.split "#"
         |> List.head
         |> Maybe.withDefault ""
+
+
+removeCommentSigns : String -> String
+removeCommentSigns configLine =
+    if List.member (String.left 1 configLine) [ "#", " " ] then
+        configLine |> String.dropLeft 1 |> removeCommentSigns
+
+    else
+        configLine
 
 
 
