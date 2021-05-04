@@ -197,12 +197,15 @@ convertVimToEmacs vimConfig options =
 convertOption : String -> Array.Array Option -> String
 convertOption configLine options =
     if String.startsWith "#" configLine then
+        -- This config line is a comment
         ";; " ++ removeCommentSigns configLine
 
     else if String.filter (\x -> x /= ' ') configLine |> String.isEmpty then
+        -- This config line is only a whitespace
         configLine
 
     else
+        -- This config line is some kind of option
         let
             split =
                 String.split "=" configLine |> Array.fromList |> Array.map String.trim
@@ -219,6 +222,7 @@ convertOption configLine options =
 
             Just option ->
                 let
+                    -- Is this an option that is supposed to have a value but it is missing?
                     missingValue =
                         option.param /= Nothing && (value |> Maybe.withDefault "" |> String.isEmpty)
 
