@@ -17,6 +17,7 @@ import Bootstrap.Grid as Grid
 import Bootstrap.Grid.Col
 import Bootstrap.Grid.Row
 import Browser
+import Debug
 import FontAwesome.Attributes as Icon
 import FontAwesome.Brands as Icon
 import FontAwesome.Icon as Icon exposing (Icon)
