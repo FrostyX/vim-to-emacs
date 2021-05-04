@@ -39,12 +39,12 @@ testConvertOption =
                     (convertOption "set foo" options)
                     ";; Unknown alternative to set foo"
 
-        -- TODO There shouldn't be =
+        --
         , test "Test simple option" <|
             \_ ->
                 Expect.equal
                     (convertOption "set number" options)
-                    ";; set number=\n(set-number-mock t)\n"
+                    ";; set number\n(set-number-mock t)\n"
 
         --
         , test "Test option with parameter" <|

@@ -231,6 +231,9 @@ convertOption configLine options =
                         if missingValue then
                             option.param
 
+                        else if option.param == Nothing then
+                            Nothing
+
                         else
                             value |> Maybe.withDefault "" |> removeComment |> String.trim |> Just
                 in
