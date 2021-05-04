@@ -197,7 +197,7 @@ convertVimToEmacs vimConfig options =
 convertOption : String -> Array.Array Option -> String
 convertOption configLine options =
     if String.startsWith "#" configLine then
-        configLine
+        ";; " ++ configLine
 
     else if String.filter (\x -> x /= ' ') configLine |> String.isEmpty then
         configLine
