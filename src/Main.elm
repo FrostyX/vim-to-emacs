@@ -212,7 +212,11 @@ convertOption configLine options =
                 String.split "=" configLine |> Array.fromList |> Array.map String.trim
 
             name =
-                split |> Array.get 0 |> Maybe.withDefault configLine
+                split
+                    |> Array.get 0
+                    |> Maybe.withDefault configLine
+                    |> removeComment
+                    |> String.trim
 
             value =
                 split |> Array.get 1

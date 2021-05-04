@@ -47,6 +47,13 @@ testConvertOption =
                     ";; set number\n(set-number-mock t)\n"
 
         --
+        , test "Test simple option with comment" <|
+            \_ ->
+                Expect.equal
+                    (convertOption "set number # Foo" options)
+                    ";; set number\n(set-number-mock t)\n"
+
+        --
         , test "Test option with parameter" <|
             \_ ->
                 Expect.equal
