@@ -1,9 +1,10 @@
 module TestConvert exposing (..)
 
 import Array
+import Convert exposing (..)
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
-import Main exposing (..)
+import Models exposing (..)
 import Test exposing (..)
 
 
