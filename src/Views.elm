@@ -33,6 +33,7 @@ import Html
         , h3
         , i
         , input
+        , node
         , p
         , pre
         , span
@@ -44,10 +45,19 @@ import Html
         , thead
         , tr
         )
-import Html.Attributes exposing (attribute, class, href, id, name, value)
+import Html.Attributes exposing (attribute, class, href, id, name, rel, value)
 import Html.Events exposing (onClick, onInput)
 import Maybe
 import Models exposing (..)
+
+
+stylesheet : Html msg
+stylesheet =
+    node "link"
+        [ rel "stylesheet"
+        , href "/css/style.css"
+        ]
+        []
 
 
 view : Model -> Html Msg
@@ -55,6 +65,7 @@ view model =
     Grid.container []
         [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
         , Icon.css
+        , stylesheet
         , Grid.row []
             [ Grid.col []
                 [ h1 [] [ text "Vim to Emacs" ]
