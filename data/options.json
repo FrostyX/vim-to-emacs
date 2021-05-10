@@ -7,7 +7,7 @@
     },
     {
         "vim": "set nocompatible",
-        "emacs": "TODO",
+        "emacs": null,
         "param": null,
         "status": "NOOP"
     },
@@ -67,7 +67,7 @@
     },
     {
         "vim": "set pastetoggle",
-        "emacs": "NOOP",
+        "emacs": null,
         "param": "<F2>",
         "status": "NOOP"
     },

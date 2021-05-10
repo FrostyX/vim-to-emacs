@@ -29,7 +29,7 @@ type Status
 
 type alias Option =
     { vim : String
-    , emacs : String
+    , emacs : Maybe String
     , param : Maybe String
     , status : Status
     }

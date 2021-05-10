@@ -144,12 +144,22 @@ viewOption option =
                         [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
                         , text " Emacs configuration"
                         ]
-                , Block.custom <| pre [] [ text option.emacs ]
+                , Block.custom <| viewEmacsCommand option
                 , Block.text []
                     [ text "Some note about incompatibility or something" ]
                 ]
             ]
         }
+
+
+viewEmacsCommand : Option -> Html Msg
+viewEmacsCommand option =
+    case option.emacs of
+        Nothing ->
+            p [] [ text "This option is NOOP for emacs" ]
+
+        Just emacsValue ->
+            pre [] [ text emacsValue ]
 
 
 uniqName : Option -> String

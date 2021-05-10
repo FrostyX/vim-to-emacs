@@ -10,8 +10,9 @@ import Test exposing (..)
 
 options =
     Array.fromList
-        [ Option "set number" "(set-number-mock t)" Nothing Compatible
-        , Option "set shiftwidth" "(setq evil-shift-width {0})" (Just "4") Unknown
+        [ Option "set number" (Just "(set-number-mock t)") Nothing Compatible
+        , Option "set shiftwidth" (Just "(setq evil-shift-width {0})") (Just "4") Unknown
+        , Option "set nocompatible" Nothing Nothing NOOP
         ]
 
 
@@ -88,4 +89,18 @@ testConvertOption =
                 Expect.equal
                     (convertOption "set shiftwidth=6  # Foo" options)
                     ";; set shiftwidth=6\n(setq evil-shift-width 6)\n"
+
+        --
+        , test "Test NOOP option" <|
+            \_ ->
+                Expect.equal
+                    (convertOption "set nocompatible" options)
+                    ";; set nocompatible\n;; The `set nocompatible' option is NOOP for emacs\n"
+
+        --
+        , test "Test NOOP option with param" <|
+            \_ ->
+                Expect.equal
+                    (convertOption "set nocompatible" options)
+                    ";; set nocompatible\n;; The `set nocompatible' option is NOOP for emacs\n"
         ]

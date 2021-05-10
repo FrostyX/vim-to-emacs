@@ -68,7 +68,7 @@ convertOption configLine options =
                 )
                     ++ interpolate ";; {0}\n{1}\n"
                         [ parameterizedVimOption option.vim defaultedValue
-                        , parameterizedEmacsOption option.emacs defaultedValue
+                        , parameterizedEmacsOption option defaultedValue
                         ]
 
 
@@ -99,11 +99,14 @@ parameterizedVimOption vim param =
             vim ++ "=" ++ x
 
 
-parameterizedEmacsOption : String -> Maybe String -> String
-parameterizedEmacsOption emacs param =
-    case param of
-        Nothing ->
-            emacs
+parameterizedEmacsOption : Option -> Maybe String -> String
+parameterizedEmacsOption option param =
+    case ( option.emacs, param ) of
+        ( Just emacsValue, Nothing ) ->
+            emacsValue
 
-        Just value ->
-            interpolate emacs [ value ]
+        ( Just emacsValue, Just value ) ->
+            interpolate emacsValue [ value ]
+
+        ( Nothing, _ ) ->
+            interpolate ";; The `{0}' option is NOOP for emacs" [ option.vim ]

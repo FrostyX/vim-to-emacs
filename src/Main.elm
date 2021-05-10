@@ -43,9 +43,14 @@ optionDecoder : Decoder Option
 optionDecoder =
     map4 Option
         (field "vim" string)
-        (field "emacs" string)
+        (field "emacs" emacsDecoder)
         (field "param" paramDecoder)
         (field "status" statusDecoder)
+
+
+emacsDecoder : Decoder (Maybe String)
+emacsDecoder =
+    Json.Decode.maybe Json.Decode.string
 
 
 paramDecoder : Decoder (Maybe String)
