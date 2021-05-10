@@ -2,6 +2,7 @@ module Models exposing (..)
 
 import Array
 import Bootstrap.Accordion as Accordion
+import Http
 
 
 type alias Model =
@@ -16,6 +17,7 @@ type Msg
     = AccordionMsg Accordion.State
     | SetOptionValue String
     | Convert String
+    | GotOptions (Result Http.Error (List Option))
 
 
 type Status

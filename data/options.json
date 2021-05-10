@@ -1,0 +1,14 @@
+[
+    {
+	"vim": "set number",
+	"emacs": "(add-hook 'prog-mode-hook #'display-line-numbers-mode)",
+	"param": null,
+	"status": "Compatible"
+    },
+    {
+        "vim": "set pastetoggle",
+        "emacs": "NOOP",
+        "param": "<F2>",
+        "status": "NOOP"
+    }
+]

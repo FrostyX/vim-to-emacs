@@ -5,7 +5,8 @@ import Bootstrap.Accordion as Accordion
 import Browser
 import Convert exposing (..)
 import Debug
-import Maybe
+import Http exposing (..)
+import Json.Decode exposing (Decoder, field, map2, map4, string, succeed)
 import Models exposing (..)
 import String.Interpolate exposing (interpolate)
 import Views exposing (..)
@@ -23,6 +24,56 @@ main =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Accordion.subscriptions model.accordionState AccordionMsg
+
+
+readOptions : Cmd Msg
+readOptions =
+    Http.get
+        { url = "/data/options.json"
+        , expect = Http.expectJson GotOptions optionListDecoder
+        }
+
+
+optionListDecoder : Decoder (List Option)
+optionListDecoder =
+    Json.Decode.list optionDecoder
+
+
+optionDecoder : Decoder Option
+optionDecoder =
+    map4 Option
+        (field "vim" string)
+        (field "emacs" string)
+        (field "param" paramDecoder)
+        (field "status" statusDecoder)
+
+
+paramDecoder : Decoder (Maybe String)
+paramDecoder =
+    Json.Decode.maybe Json.Decode.string
+
+
+statusDecoder : Decoder Status
+statusDecoder =
+    Json.Decode.string
+        |> Json.Decode.andThen
+            (\str ->
+                case str of
+                    "Compatible" ->
+                        Json.Decode.succeed Compatible
+
+                    "NOOP" ->
+                        Json.Decode.succeed NOOP
+
+                    "Incompatible" ->
+                        Json.Decode.succeed Incompatible
+
+                    "Unknown" ->
+                        Json.Decode.succeed Unknown
+
+                    unexpected ->
+                        Json.Decode.fail <| "Unexpected status: " ++ unexpected
+            )
 
 
 initOptions : Array.Array Option
@@ -73,7 +124,7 @@ init _ =
       , vimConfig = "Foo"
       , emacsConfig = initEmacsConfig
       }
-    , Cmd.none
+    , readOptions
     )
 
 
@@ -110,3 +161,15 @@ update msg model =
                             { foundOption | param = Just value }
                     in
                     ( { model | options = Array.set optionIndex updatedOption model.options }, Cmd.none )
+
+        GotOptions result ->
+            let
+                _ =
+                    Debug.log "Result" result
+            in
+            case result of
+                Ok option ->
+                    ( model, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
