@@ -6,9 +6,93 @@
 	"status": "Compatible"
     },
     {
+        "vim": "set nocompatible",
+        "emacs": "TODO",
+        "param": null,
+        "status": "NOOP"
+    },
+    {
+        "vim": "set nofoldenable",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "set autowrite",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "set showmatch",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "set tabstop",
+        "emacs": "TODO",
+        "param": "4",
+        "status": "Unknown"
+    },
+    {
+        "vim": "set shiftwidth",
+        "emacs": "(setq evil-shift-width {0})",
+        "param": "4",
+        "status": "Unknown"
+    },
+    {
+        "vim": "softtabstop",
+        "emacs": "TODO",
+        "param": "4",
+        "status": "Unknown"
+    },
+    {
+        "vim": "set autoindent",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "set smartindent",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "set scrolloff",
+        "emacs": "TODO",
+        "param": "5",
+        "status": "Unknown"
+    },
+    {
         "vim": "set pastetoggle",
         "emacs": "NOOP",
         "param": "<F2>",
         "status": "NOOP"
+    },
+    {
+        "vim": "nmap <silent> <c-k> :wincmd k<CR>",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "nmap <silent> <c-j> :wincmd j<CR>",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "nmap <silent> <c-h> :wincmd h<CR>",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
+    },
+    {
+        "vim": "nmap <silent> <c-l> :wincmd l<CR>",
+        "emacs": "TODO",
+        "param": null,
+        "status": "Unknown"
     }
 ]
