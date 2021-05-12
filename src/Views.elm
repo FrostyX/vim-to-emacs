@@ -78,6 +78,7 @@ view model =
                 , viewJumbotron
                 , viewConvertor model
                 , viewOptionSections model
+                , viewFooter
                 ]
             ]
         ]
@@ -254,3 +255,21 @@ viewEmacsDocumentationLink option =
             ListGroup.anchor
                 [ ListGroup.attrs [ href value ] ]
                 [ text "Emacs documentation" ]
+
+
+viewFooter : Html Msg
+viewFooter =
+    Html.footer []
+        [ Grid.row []
+            [ Grid.col [] [ viewCopyright ]
+            ]
+        ]
+
+
+viewCopyright : Html Msg
+viewCopyright =
+    p []
+        [ text "Jakub Kadlčík © 2021 | "
+        , a [ href "http://frostyx.cz/" ]
+            [ text "FrostyX.cz" ]
+        ]
