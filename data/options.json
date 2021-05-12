@@ -36,31 +36,31 @@
     },
     {
         "vim": "set tabstop",
-        "emacs": "TODO",
+        "emacs": "(setq tab-width {0})",
         "param": "4",
-        "status": "Unknown",
-        "emacsDocs": null
+        "status": "Compatible",
+        "emacsDocs": "https://www.gnu.org/software/emacs/manual/html_node/efaq/Changing-the-length-of-a-Tab.html"
     },
     {
         "vim": "set shiftwidth",
         "emacs": "(setq evil-shift-width {0})",
         "param": "4",
-        "status": "Unknown",
-        "emacsDocs": null
+        "status": "Compatible",
+        "emacsDocs": "https://evil.readthedocs.io/en/latest/settings.html#elispobj-evil-shift-width"
     },
     {
         "vim": "set softtabstop",
-        "emacs": "TODO",
+        "emacs": "(setq tab-stop-list (number-sequence {0} 120 {0}))",
         "param": "4",
-        "status": "Unknown",
-        "emacsDocs": null
+        "status": "Compatible",
+        "emacsDocs": "https://www.gnu.org/software/emacs/manual/html_node/emacs/Tab-Stops.html"
     },
     {
         "vim": "set autoindent",
-        "emacs": "TODO",
+        "emacs": "(define-key global-map (kbd \"RET\") 'newline-and-indent)",
         "param": null,
-        "status": "Unknown",
-        "emacsDocs": null
+        "status": "Compatible",
+        "emacsDocs": "https://www.emacswiki.org/emacs/AutoIndentation#h5o-2"
     },
     {
         "vim": "set smartindent",
@@ -71,10 +71,10 @@
     },
     {
         "vim": "set scrolloff",
-        "emacs": "TODO",
+        "emacs": "(setq scroll-step 1)\n(setq scroll-margin {0})\n(setq scroll-conservatively 101)",
         "param": "5",
-        "status": "Unknown",
-        "emacsDocs": null
+        "status": "Compatible",
+        "emacsDocs": "https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html"
     },
     {
         "vim": "set pastetoggle",
