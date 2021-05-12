@@ -230,6 +230,9 @@ viewDocumentationLinks option =
             [ ListGroup.attrs [ href <| vimDocumentation option ] ]
             [ text "Vim documentation" ]
         , viewEmacsDocumentationLink option
+        , ListGroup.anchor
+            [ ListGroup.attrs [ href "https://github.com/FrostyX/vim-to-emacs/issues" ] ]
+            [ text "Report issue" ]
         ]
 
 
