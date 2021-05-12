@@ -5,6 +5,14 @@ import Models exposing (..)
 import String.Interpolate exposing (interpolate)
 
 
+evilPackage : String
+evilPackage =
+    "(use-package evil\n"
+        ++ "  :ensure t\n"
+        ++ "  :config\n"
+        ++ "  (evil-mode))\n\n"
+
+
 convertVimToEmacs : String -> Array.Array Option -> String
 convertVimToEmacs vimConfig options =
     vimConfig
@@ -12,6 +20,7 @@ convertVimToEmacs vimConfig options =
         |> List.map String.trim
         |> List.map (\x -> convertOption x options)
         |> String.join "\n"
+        |> String.append evilPackage
 
 
 convertOption : String -> Array.Array Option -> String
