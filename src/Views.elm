@@ -49,7 +49,7 @@ import Html
         , thead
         , tr
         )
-import Html.Attributes exposing (attribute, class, href, id, name, rel, value)
+import Html.Attributes exposing (attribute, class, href, id, name, rel, style, value)
 import Html.Events exposing (onClick, onInput)
 import Logic exposing (..)
 import Maybe
@@ -96,25 +96,26 @@ viewOptionSections model =
 viewOptionStatus : Option -> Html Msg
 viewOptionStatus option =
     let
-        ( textClass, icon ) =
+        ( textClass, icon, textValue ) =
             case option.status of
                 Compatible ->
-                    ( "text-success", Icon.check )
+                    ( "text-success", Icon.check, "Compatible" )
 
                 NOOP ->
-                    ( "text-info", Icon.smile )
+                    ( "text-info", Icon.smile, "NOOP" )
 
                 Incompatible ->
-                    ( "text-danger", Icon.times )
+                    ( "text-danger", Icon.times, "Incompatible" )
 
                 Unknown ->
-                    ( "text-warning", Icon.exclamationTriangle )
+                    ( "text-warning", Icon.exclamationTriangle, "Unknown" )
     in
     span
-        [ class "float-right"
-        , class textClass
+        [ class textClass
         ]
-        [ icon |> Icon.viewStyled [ Icon.lg ] ]
+        [ icon |> Icon.viewStyled [ Icon.lg ]
+        , text <| " " ++ textValue
+        ]
 
 
 viewOption : Option -> Accordion.Card Msg
@@ -123,11 +124,9 @@ viewOption option =
         { id = option.vim
         , options = []
         , header =
-            (Accordion.header [] <|
+            Accordion.header [] <|
                 Accordion.toggle []
                     [ h3 [] [ text option.vim ] ]
-            )
-                |> Accordion.appendHeader [ viewOptionStatus option ]
         , blocks =
             [ Accordion.block []
                 [ Block.custom <|
@@ -224,7 +223,10 @@ viewConvertor model =
 viewDocumentationLinks : Option -> Html Msg
 viewDocumentationLinks option =
     ListGroup.custom
-        [ ListGroup.anchor
+        [ ListGroup.button
+            [ ListGroup.disabled ]
+            [ viewOptionStatus option ]
+        , ListGroup.anchor
             [ ListGroup.attrs [ href <| vimDocumentation option ] ]
             [ text "Vim documentation" ]
         , ListGroup.anchor
