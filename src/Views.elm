@@ -141,16 +141,16 @@ viewOption option =
                                         |> Icon.styled [ Icon.lg ]
                                         |> Icon.view
                                     , text " Vim configuration"
-                                    , viewInput option
-                                    , pre []
-                                        [ text (parameterizedVimOption option.vim option.param) ]
-                                    , p []
-                                        [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
-                                        , text " Emacs configuration"
-                                        ]
-                                    , viewEmacsCommand option
-                                    , p [] [ text "Some note about incompatibility or something" ]
                                     ]
+                                , viewInput option
+                                , pre []
+                                    [ text (parameterizedVimOption option.vim option.param) ]
+                                , p []
+                                    [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
+                                    , text " Emacs configuration"
+                                    ]
+                                , viewEmacsCommand option
+                                , p [] [ text "Some note about incompatibility or something" ]
                                 ]
                             , Grid.col [ Col.xs3 ]
                                 [ viewDocumentationLinks option
