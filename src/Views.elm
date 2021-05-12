@@ -145,8 +145,7 @@ viewOption option =
                     Grid.container []
                         [ Grid.row []
                             [ Grid.col []
-                                [ p [] [ text "Some description of the Vim command" ]
-                                , p []
+                                [ p []
                                     [ viewVimIcon
                                     , text " Vim configuration"
                                     ]
@@ -157,7 +156,6 @@ viewOption option =
                                     , text " Emacs configuration"
                                     ]
                                 , viewEmacsCommand option
-                                , p [] [ text "Some note about incompatibility or something" ]
                                 ]
                             , Grid.col [ Col.xs3 ]
                                 [ viewDocumentationLinks option
