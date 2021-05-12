@@ -32,4 +32,5 @@ type alias Option =
     , emacs : Maybe String
     , param : Maybe String
     , status : Status
+    , emacsDocs : Maybe String
     }

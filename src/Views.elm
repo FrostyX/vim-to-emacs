@@ -229,7 +229,19 @@ viewDocumentationLinks option =
         , ListGroup.anchor
             [ ListGroup.attrs [ href <| vimDocumentation option ] ]
             [ text "Vim documentation" ]
-        , ListGroup.anchor
-            []
-            [ text "Emacs documentation" ]
+        , viewEmacsDocumentationLink option
         ]
+
+
+viewEmacsDocumentationLink : Option -> ListGroup.CustomItem Msg
+viewEmacsDocumentationLink option =
+    case option.emacsDocs of
+        Nothing ->
+            ListGroup.anchor
+                [ ListGroup.disabled ]
+                [ text "Emacs documentation" ]
+
+        Just value ->
+            ListGroup.anchor
+                [ ListGroup.attrs [ href value ] ]
+                [ text "Emacs documentation" ]

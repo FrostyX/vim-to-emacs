@@ -3,96 +3,112 @@
 	"vim": "set number",
 	"emacs": "(add-hook 'prog-mode-hook #'display-line-numbers-mode)",
 	"param": null,
-	"status": "Compatible"
+	"status": "Compatible",
+        "emacsDocs": "https://www.gnu.org/software/emacs/manual/html_node/emacs/Display-Custom.html"
     },
     {
         "vim": "set nocompatible",
         "emacs": null,
         "param": null,
-        "status": "NOOP"
+        "status": "NOOP",
+        "emacsDocs": null
     },
     {
         "vim": "set nofoldenable",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set autowrite",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set showmatch",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set tabstop",
         "emacs": "TODO",
         "param": "4",
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set shiftwidth",
         "emacs": "(setq evil-shift-width {0})",
         "param": "4",
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "softtabstop",
         "emacs": "TODO",
         "param": "4",
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set autoindent",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set smartindent",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set scrolloff",
         "emacs": "TODO",
         "param": "5",
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "set pastetoggle",
         "emacs": null,
         "param": "<F2>",
-        "status": "NOOP"
+        "status": "NOOP",
+        "emacsDocs": null
     },
     {
         "vim": "nmap <silent> <c-k> :wincmd k<CR>",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "nmap <silent> <c-j> :wincmd j<CR>",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "nmap <silent> <c-h> :wincmd h<CR>",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     },
     {
         "vim": "nmap <silent> <c-l> :wincmd l<CR>",
         "emacs": "TODO",
         "param": null,
-        "status": "Unknown"
+        "status": "Unknown",
+        "emacsDocs": null
     }
 ]

@@ -6,7 +6,7 @@ import Browser
 import Convert exposing (..)
 import Debug
 import Http exposing (..)
-import Json.Decode exposing (Decoder, field, map2, map4, string, succeed)
+import Json.Decode exposing (Decoder, field, map2, map4, map5, string, succeed)
 import Models exposing (..)
 import String.Interpolate exposing (interpolate)
 import Views exposing (..)
@@ -41,11 +41,12 @@ optionListDecoder =
 
 optionDecoder : Decoder Option
 optionDecoder =
-    map4 Option
+    map5 Option
         (field "vim" string)
         (field "emacs" emacsDecoder)
         (field "param" paramDecoder)
         (field "status" statusDecoder)
+        (field "emacsDocs" emacsDocsDecoder)
 
 
 emacsDecoder : Decoder (Maybe String)
@@ -55,6 +56,11 @@ emacsDecoder =
 
 paramDecoder : Decoder (Maybe String)
 paramDecoder =
+    Json.Decode.maybe Json.Decode.string
+
+
+emacsDocsDecoder : Decoder (Maybe String)
+emacsDocsDecoder =
     Json.Decode.maybe Json.Decode.string
 
 
