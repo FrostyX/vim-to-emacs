@@ -36,6 +36,7 @@ import Html
         , h2
         , h3
         , i
+        , img
         , input
         , node
         , p
@@ -49,7 +50,7 @@ import Html
         , thead
         , tr
         )
-import Html.Attributes exposing (attribute, class, href, id, name, rel, style, value)
+import Html.Attributes exposing (attribute, class, href, id, name, rel, src, style, value, width)
 import Html.Events exposing (onClick, onInput)
 import Logic exposing (..)
 import Maybe
@@ -118,6 +119,16 @@ viewOptionStatus option =
         ]
 
 
+viewVimIcon : Html Msg
+viewVimIcon =
+    img [ width 18, src "/img/macvim.svg" ] []
+
+
+viewEmacsIcon : Html Msg
+viewEmacsIcon =
+    img [ width 18, src "/img/emacs.svg" ] []
+
+
 viewOption : Option -> Accordion.Card Msg
 viewOption option =
     Accordion.card
@@ -135,18 +146,13 @@ viewOption option =
                             [ Grid.col []
                                 [ p [] [ text "Some description of the Vim command" ]
                                 , p []
-                                    [ Icon.cross
-                                        |> Icon.present
-                                        |> Icon.transform [ Icon.rotate 180 ]
-                                        |> Icon.styled [ Icon.lg ]
-                                        |> Icon.view
+                                    [ viewVimIcon
                                     , text " Vim configuration"
                                     ]
                                 , viewInput option
-                                , pre []
-                                    [ text (parameterizedVimOption option.vim option.param) ]
+                                , pre [] [ text (parameterizedVimOption option.vim option.param) ]
                                 , p []
-                                    [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
+                                    [ viewEmacsIcon
                                     , text " Emacs configuration"
                                     ]
                                 , viewEmacsCommand option
