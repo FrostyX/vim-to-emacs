@@ -176,7 +176,7 @@ viewEmacsCommand option =
             p [] [ text "This option is NOOP for emacs" ]
 
         Just emacsValue ->
-            pre [] [ text emacsValue ]
+            pre [] [ text <| parameterizedEmacsOption option option.param ]
 
 
 uniqName : Option -> String
