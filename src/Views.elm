@@ -3,13 +3,17 @@ module Views exposing (..)
 import Array
 import Bootstrap.Accordion as Accordion
 import Bootstrap.Button as Button
+import Bootstrap.ButtonGroup as ButtonGroup
 import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
 import Bootstrap.Card.Block as Block
 import Bootstrap.Form.Textarea as Textarea
 import Bootstrap.Grid as Grid
-import Bootstrap.Grid.Col
+import Bootstrap.Grid.Col as Col
 import Bootstrap.Grid.Row
+import Bootstrap.ListGroup as ListGroup
+import Bootstrap.Navbar as Navbar
+import Bootstrap.Utilities.Flex as Flex
 import Browser
 import Convert exposing (..)
 import Debug
@@ -47,6 +51,7 @@ import Html
         )
 import Html.Attributes exposing (attribute, class, href, id, name, rel, value)
 import Html.Events exposing (onClick, onInput)
+import Logic exposing (..)
 import Maybe
 import Models exposing (..)
 
@@ -125,28 +130,34 @@ viewOption option =
                 |> Accordion.appendHeader [ viewOptionStatus option ]
         , blocks =
             [ Accordion.block []
-                [ Block.text []
-                    [ text "Some description of the Vim command" ]
-                , Block.custom <|
-                    p []
-                        [ Icon.cross
-                            |> Icon.present
-                            |> Icon.transform [ Icon.rotate 180 ]
-                            |> Icon.styled [ Icon.lg ]
-                            |> Icon.view
-                        , text " Vim configuration"
+                [ Block.custom <|
+                    Grid.container []
+                        [ Grid.row []
+                            [ Grid.col []
+                                [ p [] [ text "Some description of the Vim command" ]
+                                , p []
+                                    [ Icon.cross
+                                        |> Icon.present
+                                        |> Icon.transform [ Icon.rotate 180 ]
+                                        |> Icon.styled [ Icon.lg ]
+                                        |> Icon.view
+                                    , text " Vim configuration"
+                                    , viewInput option
+                                    , pre []
+                                        [ text (parameterizedVimOption option.vim option.param) ]
+                                    , p []
+                                        [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
+                                        , text " Emacs configuration"
+                                        ]
+                                    , viewEmacsCommand option
+                                    , p [] [ text "Some note about incompatibility or something" ]
+                                    ]
+                                ]
+                            , Grid.col [ Col.xs3 ]
+                                [ viewDocumentationLinks option
+                                ]
+                            ]
                         ]
-                , Block.custom <| viewInput option
-                , Block.custom <|
-                    pre [] [ text (parameterizedVimOption option.vim option.param) ]
-                , Block.custom <|
-                    p []
-                        [ Icon.bible |> Icon.viewStyled [ Icon.lg ]
-                        , text " Emacs configuration"
-                        ]
-                , Block.custom <| viewEmacsCommand option
-                , Block.text []
-                    [ text "Some note about incompatibility or something" ]
                 ]
             ]
         }
@@ -207,4 +218,16 @@ viewConvertor model =
                     ]
                 ]
             ]
+        ]
+
+
+viewDocumentationLinks : Option -> Html Msg
+viewDocumentationLinks option =
+    ListGroup.custom
+        [ ListGroup.anchor
+            [ ListGroup.attrs [ href <| vimDocumentation option ] ]
+            [ text "Vim documentation" ]
+        , ListGroup.anchor
+            []
+            [ text "Emacs documentation" ]
         ]
