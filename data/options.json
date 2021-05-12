@@ -82,33 +82,5 @@
         "param": "<F2>",
         "status": "NOOP",
         "emacsDocs": null
-    },
-    {
-        "vim": "nmap <silent> <c-k> :wincmd k<CR>",
-        "emacs": "TODO",
-        "param": null,
-        "status": "Unknown",
-        "emacsDocs": null
-    },
-    {
-        "vim": "nmap <silent> <c-j> :wincmd j<CR>",
-        "emacs": "TODO",
-        "param": null,
-        "status": "Unknown",
-        "emacsDocs": null
-    },
-    {
-        "vim": "nmap <silent> <c-h> :wincmd h<CR>",
-        "emacs": "TODO",
-        "param": null,
-        "status": "Unknown",
-        "emacsDocs": null
-    },
-    {
-        "vim": "nmap <silent> <c-l> :wincmd l<CR>",
-        "emacs": "TODO",
-        "param": null,
-        "status": "Unknown",
-        "emacsDocs": null
     }
 ]
