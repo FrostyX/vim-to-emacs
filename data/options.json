@@ -49,7 +49,7 @@
         "emacsDocs": null
     },
     {
-        "vim": "softtabstop",
+        "vim": "set softtabstop",
         "emacs": "TODO",
         "param": "4",
         "status": "Unknown",
