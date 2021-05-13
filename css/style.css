@@ -28,10 +28,12 @@ body {
 
 h1 {
   color: var(--base0D);
+  margin-top: 40px;
 }
 
 h2 {
   color: var(--base08);
+  margin-top: 20px;
 }
 
 h3 {
@@ -55,8 +57,16 @@ h3 {
   color: var(--base08)!important;
 }
 
+a#logo span {
+  width: 5px;
+  display: inline-block;
+}
+
+a#logo {
+  color: var(--base08);
+}
+
 footer {
   margin-top: 70px;
   text-align: center;
-
 }

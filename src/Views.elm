@@ -74,13 +74,49 @@ view model =
         , stylesheet
         , Grid.row []
             [ Grid.col []
-                [ h1 [] [ text "Vim to Emacs" ]
+                [ viewMenu
+                , h1 [] [ text "Vim to Emacs" ]
                 , viewJumbotron
                 , viewConvertor model
                 , viewOptionSections model
                 , viewFooter
                 ]
             ]
+        ]
+
+
+viewMenu : Html Msg
+viewMenu =
+    Html.nav
+        [ class "navbar"
+        , class "navbar-expand-lg"
+        ]
+        [ viewLogo
+        , div
+            [ class "navbar-nav"
+            , class "ml-auto"
+            ]
+            [ viewMenuItem "Issue tracker" "https://github.com/FrostyX/vim-to-emacs/issues"
+            , viewMenuItem "Source code" "https://github.com/FrostyX/vim-to-emacs"
+            , viewMenuItem "License" "https://github.com/FrostyX/vim-to-emacs/blob/master/LICENSE"
+            ]
+        ]
+
+
+viewMenuItem : String -> String -> Html Msg
+viewMenuItem title url =
+    a [ class "nav-link", class "nav-item", href url ]
+        [ text title ]
+
+
+viewLogo : Html Msg
+viewLogo =
+    a [ id "logo", class "navbar-brand", href "/" ]
+        [ img [ width 25, src "/img/emacs.svg" ] []
+        , span [] []
+        , RegularIcon.heart |> Icon.viewStyled [ Icon.lg ]
+        , span [] []
+        , img [ width 25, src "/img/macvim.svg" ] []
         ]
 
 
