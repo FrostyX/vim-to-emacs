@@ -10,9 +10,9 @@ import Test exposing (..)
 
 options =
     Array.fromList
-        [ Option "set number" (Just "(set-number-mock t)") Nothing Compatible
-        , Option "set shiftwidth" (Just "(setq evil-shift-width {0})") (Just "4") Unknown
-        , Option "set nocompatible" Nothing Nothing NOOP
+        [ Option "set number" (Just "(set-number-mock t)") Nothing Compatible Nothing
+        , Option "set shiftwidth" (Just "(setq evil-shift-width {0})") (Just "4") Unknown Nothing
+        , Option "set nocompatible" Nothing Nothing NOOP Nothing
         ]
 
 
