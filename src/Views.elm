@@ -214,7 +214,7 @@ viewOption option =
                 [ viewEmacsIcon
                 , text " Emacs configuration"
                 ]
-            , viewEmacsCommand option
+            , viewEmacsOptionCommand option
             ]
         , Grid.col [ Col.xs3 ]
             [ viewDocumentationLinks option
@@ -235,7 +235,7 @@ viewPlugin plugin =
                 [ viewEmacsIcon
                 , text " Emacs configuration"
                 ]
-            , viewEmacsCommand2 plugin
+            , viewEmacsPluginCommand plugin
             , div [] [ text <| Maybe.withDefault "" plugin.note ]
             ]
         , Grid.col [ Col.xs3 ]
@@ -244,8 +244,8 @@ viewPlugin plugin =
         ]
 
 
-viewEmacsCommand : Option -> Html Msg
-viewEmacsCommand option =
+viewEmacsOptionCommand : Option -> Html Msg
+viewEmacsOptionCommand option =
     case option.emacs of
         Nothing ->
             p [] [ text "This option is NOOP for emacs" ]
@@ -254,8 +254,8 @@ viewEmacsCommand option =
             pre [] [ text <| parameterizedEmacsOption option option.param ]
 
 
-viewEmacsCommand2 : Plugin -> Html Msg
-viewEmacsCommand2 plugin =
+viewEmacsPluginCommand : Plugin -> Html Msg
+viewEmacsPluginCommand plugin =
     case plugin.emacsCode of
         Nothing ->
             p [] [ text "This plugin is NOOP for emacs" ]
