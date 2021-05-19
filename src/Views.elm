@@ -181,78 +181,67 @@ viewEmacsIcon =
     img [ width 18, src "/img/emacs.svg" ] []
 
 
-viewOption : Option -> Accordion.Card Msg
-viewOption option =
+viewCard : String -> List (Grid.Column Msg) -> Accordion.Card Msg
+viewCard title content =
     Accordion.card
-        { id = option.vim
+        { id = title
         , options = []
         , header =
             Accordion.header [] <|
                 Accordion.toggle []
-                    [ h3 [] [ text option.vim ] ]
+                    [ h3 [] [ text title ] ]
         , blocks =
             [ Accordion.block []
                 [ Block.custom <|
                     Grid.container []
-                        [ Grid.row []
-                            [ Grid.col []
-                                [ p []
-                                    [ viewVimIcon
-                                    , text " Vim configuration"
-                                    ]
-                                , viewInput option
-                                , pre [] [ text (parameterizedVimOption option.vim option.param) ]
-                                , p []
-                                    [ viewEmacsIcon
-                                    , text " Emacs configuration"
-                                    ]
-                                , viewEmacsCommand option
-                                ]
-                            , Grid.col [ Col.xs3 ]
-                                [ viewDocumentationLinks option
-                                ]
-                            ]
-                        ]
+                        [ Grid.row [] content ]
                 ]
             ]
         }
+
+
+viewOption : Option -> Accordion.Card Msg
+viewOption option =
+    viewCard option.vim <|
+        [ Grid.col []
+            [ p []
+                [ viewVimIcon
+                , text " Vim configuration"
+                ]
+            , viewInput option
+            , pre [] [ text (parameterizedVimOption option.vim option.param) ]
+            , p []
+                [ viewEmacsIcon
+                , text " Emacs configuration"
+                ]
+            , viewEmacsCommand option
+            ]
+        , Grid.col [ Col.xs3 ]
+            [ viewDocumentationLinks option
+            ]
+        ]
 
 
 viewPlugin : Plugin -> Accordion.Card Msg
 viewPlugin plugin =
-    Accordion.card
-        { id = plugin.vim
-        , options = []
-        , header =
-            Accordion.header [] <|
-                Accordion.toggle []
-                    [ h3 [] [ text plugin.vim ] ]
-        , blocks =
-            [ Accordion.block []
-                [ Block.custom <|
-                    Grid.container []
-                        [ Grid.row []
-                            [ Grid.col []
-                                [ p []
-                                    [ viewVimIcon
-                                    , text " Vim configuration"
-                                    ]
-                                , viewVimPluginCommand plugin
-                                , p []
-                                    [ viewEmacsIcon
-                                    , text " Emacs configuration"
-                                    ]
-                                , viewEmacsCommand2 plugin
-                                , div [] [ text <| Maybe.withDefault "" plugin.note ]
-                                ]
-                            , Grid.col [ Col.xs3 ]
-                                [ viewPluginDocumentationLinks plugin
-                                ]
-                            ]
-                        ]
+    viewCard plugin.vim <|
+        [ Grid.col []
+            [ p []
+                [ viewVimIcon
+                , text " Vim configuration"
                 ]
+            , viewVimPluginCommand plugin
+            , p []
+                [ viewEmacsIcon
+                , text " Emacs configuration"
+                ]
+            , viewEmacsCommand2 plugin
+            , div [] [ text <| Maybe.withDefault "" plugin.note ]
             ]
-        }
+        , Grid.col [ Col.xs3 ]
+            [ viewPluginDocumentationLinks plugin
+            ]
+        ]
 
 
 viewEmacsCommand : Option -> Html Msg
