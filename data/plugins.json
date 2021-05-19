@@ -1,0 +1,172 @@
+[
+    {
+	"vim": "Vundle",
+	"emacs": "use-package",
+	"status": "NOOP",
+	"vimCode": null,
+	"emacsCode": null,
+	"vimUrl": "https://github.com/VundleVim/Vundle.vim",
+	"emacsUrl": "https://github.com/jwiegley/use-package",
+	"note": "Emacs has a built-in package manager"
+    },
+    {
+	"vim": "vim-fugitive",
+	"emacs": "magit",
+	"status": "Compatible",
+	"vimCode": "Plugin 'tpope/vim-fugitive'",
+	"emacsCode": "(use-package magit\n  :ensure t)",
+	"vimUrl": "https://github.com/tpope/vim-fugitive",
+	"emacsUrl": "https://github.com/magit/magit",
+	"note": null
+    },
+    {
+	"vim": "vim-rhubarb",
+	"emacs": "browse-at-remote",
+	"status": "Compatible",
+	"vimCode": "Plugin 'tpope/vim-rhubarb'",
+	"emacsCode": "(use-package browse-at-remote\n  :ensure t)",
+	"vimUrl": "https://github.com/tpope/vim-rhubarb",
+	"emacsUrl": "https://github.com/rmuslimov/browse-at-remote",
+	"note": null
+    },
+    {
+	"vim": "vim-sleuth",
+	"emacs": "dtrt-indent",
+	"status": "Compatible",
+	"vimCode": "Plugin 'tpope/vim-sleuth'",
+	"emacsCode": "(use-package dtrt-indent\n  :ensure t)",
+	"vimUrl": "https://github.com/tpope/vim-sleuth",
+	"emacsUrl": "https://github.com/jscheid/dtrt-indent",
+	"note": null
+    },
+    {
+	"vim": "vim-fugitive-pagure",
+	"emacs": "browse-at-remote",
+	"status": "NOOP",
+	"vimCode": "Plugin 'FrostyX/vim-fugitive-pagure'",
+	"emacsCode": "(use-package browse-at-remote\n  :ensure t)",
+	"vimUrl": "https://github.com/FrostyX/vim-fugitive-pagure",
+	"emacsUrl": "https://github.com/rmuslimov/browse-at-remote",
+	"note": "The pagure support is built-in to `browse-at-remote' package"
+    },
+    {
+	"vim": "nerdtree",
+	"emacs": "neotree",
+	"status": "Compatible",
+	"vimCode": "Plugin 'preservim/nerdtree'",
+	"emacsCode": "(use-package neotree\n  :ensure t)",
+	"vimUrl": "https://github.com/preservim/nerdtree",
+	"emacsUrl": "https://github.com/jaypei/emacs-neotree",
+	"note": "Use built-in `dired' package instead"
+    },
+    {
+	"vim": "fzf.vim",
+	"emacs": "helm",
+	"status": "Compatible",
+	"vimCode": "Plugin 'junegunn/fzf.vim'",
+	"emacsCode": "(use-package helm\n  :ensure t)",
+	"vimUrl": "https://github.com/junegunn/fzf.vim",
+	"emacsUrl": "https://github.com/emacs-helm/helm",
+	"note": "Much more then just fzf"
+    },
+    {
+	"vim": "tcomment_vim",
+	"emacs": "evil-commentary",
+	"status": "Compatible",
+	"vimCode": "Plugin 'tomtom/tcomment_vim'",
+	"emacsCode": "(use-package evil-commentary\n  :ensure t)",
+	"vimUrl": "https://github.com/tomtom/tcomment_vim",
+	"emacsUrl": "https://github.com/linktohack/evil-commentary",
+	"note": null
+    },
+    {
+	"vim": "matchit",
+	"emacs": "evil-matchit",
+	"status": "Compatible",
+	"vimCode": "Plugin 'adelarsq/vim-matchit'",
+	"emacsCode": "(use-package evil-matchit\n  :ensure t)",
+	"vimUrl": "https://github.com/adelarsq/vim-matchit",
+	"emacsUrl": "https://github.com/redguardtoo/evil-matchit",
+	"note": null
+    },
+    {
+	"vim": "delimitMate",
+	"emacs": "smartparens",
+	"status": "Compatible",
+	"vimCode": "Plugin 'Raimondi/delimitMate'",
+	"emacsCode": "(use-package smartparens\n  :ensure t)",
+	"vimUrl": "https://github.com/Raimondi/delimitMate",
+	"emacsUrl": "https://github.com/Fuco1/smartparens",
+	"note": null
+    },
+    {
+	"vim": "Vim-Jinja2-Syntax",
+	"emacs": "jinja2-mode",
+	"status": "Compatible",
+	"vimCode": "Plugin 'Vim-Jinja2-Syntax'",
+	"emacsCode": "(use-package jinja2-mode\n  :ensure t)",
+	"vimUrl": "https://github.com/Glench/Vim-Jinja2-Syntax",
+	"emacsUrl": "https://github.com/paradoxxxzero/jinja2-mode",
+	"note": null
+    },
+    {
+	"vim": "vim-markdown",
+	"emacs": "markdown-mode",
+	"status": "Compatible",
+	"vimCode": "Plugin 'plasticboy/vim-markdown'",
+	"emacsCode": "(use-package markdown-mode\n  :ensure t)",
+	"vimUrl": "https://github.com/plasticboy/vim-markdown",
+	"emacsUrl": "https://github.com/jrblevin/markdown-mode",
+	"note": null
+    },
+    {
+	"vim": "syntastic",
+	"emacs": "company-mode",
+	"status": "Compatible",
+	"vimCode": "Plugin 'vim-syntastic/syntastic'",
+	"emacsCode": "(use-package company-mode\n  :ensure t)",
+	"vimUrl": "https://github.com/vim-syntastic/syntastic",
+	"emacsUrl": "https://github.com/company-mode/company-mode",
+	"note": null
+    },
+    {
+	"vim": "vimwiki",
+	"emacs": "org-mode",
+	"status": "NOOP",
+	"vimCode": "Plugin 'vimwiki/vimwiki'",
+	"emacsCode": null,
+	"vimUrl": "https://github.com/vimwiki/vimwiki",
+	"emacsUrl": "https://orgmode.org/",
+	"note": "Use built-in `org-mode'"
+    },
+    {
+	"vim": "goyo.vim",
+	"emacs": "writeroom",
+	"status": "Compatible",
+	"vimCode": "Plugin 'junegunn/goyo.vim'",
+	"emacsCode": "(use-package writeroom-mode\n  :ensure t)",
+	"vimUrl": "https://github.com/junegunn/goyo.vim",
+	"emacsUrl": "https://github.com/joostkremers/writeroom-mode",
+	"note": null
+    },
+    {
+	"vim": "base16-vim",
+	"emacs": "base16-theme",
+	"status": "Compatible",
+	"vimCode": "Plugin 'chriskempson/base16-vim'",
+	"emacsCode": "(use-package base16-theme\n  :ensure t)",
+	"vimUrl": "https://github.com/chriskempson/base16-vim",
+	"emacsUrl": "https://github.com/belak/base16-emacs",
+	"note": null
+    },
+    {
+	"vim": "vim-css-color",
+	"emacs": "rainbow-mode",
+	"status": "Compatible",
+	"vimCode": "Plugin 'ap/vim-css-color'",
+	"emacsCode": "(use-package rainbow-mode\n  :ensure t)",
+	"vimUrl": "https://github.com/ap/vim-css-color",
+	"emacsUrl": "https://elpa.gnu.org/packages/rainbow-mode.html",
+	"note": null
+    }
+]

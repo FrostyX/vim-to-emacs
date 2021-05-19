@@ -30,6 +30,7 @@ import Html
     exposing
         ( Html
         , a
+        , br
         , button
         , div
         , h1
@@ -79,6 +80,7 @@ view model =
                 , viewJumbotron
                 , viewConvertor model
                 , viewOptionSections model
+                , viewPlugins model
                 , viewFooter
                 ]
             ]
@@ -124,18 +126,31 @@ viewOptionSections : Model -> Html Msg
 viewOptionSections model =
     div []
         [ h2 [] [ text "Vim options" ]
-        , Accordion.config AccordionMsg
-            |> Accordion.withAnimation
-            |> Accordion.cards (Array.map viewOption model.options |> Array.toList)
-            |> Accordion.view model.accordionState
+        , viewAccordion model (Array.map viewOption model.options |> Array.toList)
         ]
 
 
-viewOptionStatus : Option -> Html Msg
-viewOptionStatus option =
+viewPlugins : Model -> Html Msg
+viewPlugins model =
+    div []
+        [ h2 [] [ text "Vim plugins" ]
+        , viewAccordion model (Array.map viewPlugin model.plugins |> Array.toList)
+        ]
+
+
+viewAccordion : Model -> List (Accordion.Card Msg) -> Html Msg
+viewAccordion model cards =
+    Accordion.config AccordionMsg
+        |> Accordion.withAnimation
+        |> Accordion.cards cards
+        |> Accordion.view model.accordionState
+
+
+viewStatus : Status -> Html Msg
+viewStatus status =
     let
         ( textClass, icon, textValue ) =
-            case option.status of
+            case status of
                 Compatible ->
                     ( "text-success", Icon.check, "Compatible" )
 
@@ -203,6 +218,43 @@ viewOption option =
         }
 
 
+viewPlugin : Plugin -> Accordion.Card Msg
+viewPlugin plugin =
+    Accordion.card
+        { id = plugin.vim
+        , options = []
+        , header =
+            Accordion.header [] <|
+                Accordion.toggle []
+                    [ h3 [] [ text plugin.vim ] ]
+        , blocks =
+            [ Accordion.block []
+                [ Block.custom <|
+                    Grid.container []
+                        [ Grid.row []
+                            [ Grid.col []
+                                [ p []
+                                    [ viewVimIcon
+                                    , text " Vim configuration"
+                                    ]
+                                , viewVimPluginCommand plugin
+                                , p []
+                                    [ viewEmacsIcon
+                                    , text " Emacs configuration"
+                                    ]
+                                , viewEmacsCommand2 plugin
+                                , div [] [ text <| Maybe.withDefault "" plugin.note ]
+                                ]
+                            , Grid.col [ Col.xs3 ]
+                                [ viewPluginDocumentationLinks plugin
+                                ]
+                            ]
+                        ]
+                ]
+            ]
+        }
+
+
 viewEmacsCommand : Option -> Html Msg
 viewEmacsCommand option =
     case option.emacs of
@@ -211,6 +263,36 @@ viewEmacsCommand option =
 
         Just emacsValue ->
             pre [] [ text <| parameterizedEmacsOption option option.param ]
+
+
+viewEmacsCommand2 : Plugin -> Html Msg
+viewEmacsCommand2 plugin =
+    case plugin.emacsCode of
+        Nothing ->
+            p [] [ text "This plugin is NOOP for emacs" ]
+
+        Just emacsCode ->
+            pre [] [ text emacsCode ]
+
+
+viewVimPluginCommand : Plugin -> Html Msg
+viewVimPluginCommand plugin =
+    case ( plugin.vimCode, plugin.vimUrl ) of
+        ( Nothing, Just vimUrl ) ->
+            p []
+                [ text "See the plugin homepage for installation instructions\n"
+                , br [] []
+                , a [ href vimUrl ] [ text vimUrl ]
+                ]
+
+        ( Just vimCode, _ ) ->
+            div []
+                [ p [] [ text "Exaple installation using Vundle" ]
+                , pre [] [ text vimCode ]
+                ]
+
+        ( Nothing, Nothing ) ->
+            span [] []
 
 
 uniqName : Option -> String
@@ -266,11 +348,43 @@ viewDocumentationLinks option =
     ListGroup.custom
         [ ListGroup.button
             [ ListGroup.disabled ]
-            [ viewOptionStatus option ]
+            [ viewStatus option.status ]
         , ListGroup.anchor
             [ ListGroup.attrs [ href <| vimDocumentation option ] ]
             [ text "Vim documentation" ]
         , viewEmacsDocumentationLink option
+        , ListGroup.anchor
+            [ ListGroup.attrs [ href "https://github.com/FrostyX/vim-to-emacs/issues" ] ]
+            [ text "Report issue" ]
+        ]
+
+
+viewPluginDocumentationLinks : Plugin -> Html Msg
+viewPluginDocumentationLinks plugin =
+    ListGroup.custom
+        [ ListGroup.button
+            [ ListGroup.disabled ]
+            [ viewStatus plugin.status ]
+        , case plugin.vimUrl of
+            Nothing ->
+                ListGroup.anchor
+                    [ ListGroup.disabled ]
+                    [ text "Vim plugin" ]
+
+            Just value ->
+                ListGroup.anchor
+                    [ ListGroup.attrs [ href value ] ]
+                    [ text "Vim plugin" ]
+        , case plugin.emacsUrl of
+            Nothing ->
+                ListGroup.anchor
+                    [ ListGroup.disabled ]
+                    [ text "Emacs package" ]
+
+            Just value ->
+                ListGroup.anchor
+                    [ ListGroup.attrs [ href value ] ]
+                    [ text "Emacs package" ]
         , ListGroup.anchor
             [ ListGroup.attrs [ href "https://github.com/FrostyX/vim-to-emacs/issues" ] ]
             [ text "Report issue" ]

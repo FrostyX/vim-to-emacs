@@ -34,6 +34,14 @@ readOptions =
         }
 
 
+readPlugins : Cmd Msg
+readPlugins =
+    Http.get
+        { url = "/data/plugins.json"
+        , expect = Http.expectJson GotPlugins pluginListDecoder
+        }
+
+
 initEmacsConfig : String
 initEmacsConfig =
     ";; Put this into init.el\n"
@@ -54,13 +62,14 @@ initEmacsConfig =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { options = Array.fromList []
+      , plugins = Array.fromList []
 
       -- Use `Accordion.initialState` to have everything collapsed
       , accordionState = Accordion.initialStateCardOpen "set nofoldenable"
       , vimConfig = "Foo"
       , emacsConfig = initEmacsConfig
       }
-    , readOptions
+    , Cmd.batch [ readOptions, readPlugins ]
     )
 
 
@@ -106,6 +115,18 @@ update msg model =
             case result of
                 Ok options ->
                     ( { model | options = Array.fromList options }, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
+
+        GotPlugins result ->
+            let
+                _ =
+                    Debug.log "Result" result
+            in
+            case result of
+                Ok plugins ->
+                    ( { model | plugins = Array.fromList plugins }, Cmd.none )
 
                 Err _ ->
                     ( model, Cmd.none )

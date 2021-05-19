@@ -1,12 +1,17 @@
 module Decoders exposing (..)
 
-import Json.Decode exposing (Decoder, field, map2, map4, map5, string, succeed)
+import Json.Decode exposing (Decoder, field, map2, map4, map5, map6, map7, map8, string, succeed)
 import Models exposing (..)
 
 
 optionListDecoder : Decoder (List Option)
 optionListDecoder =
     Json.Decode.list optionDecoder
+
+
+pluginListDecoder : Decoder (List Plugin)
+pluginListDecoder =
+    Json.Decode.list pluginDecoder
 
 
 optionDecoder : Decoder Option
@@ -17,6 +22,24 @@ optionDecoder =
         (field "param" paramDecoder)
         (field "status" statusDecoder)
         (field "emacsDocs" emacsDocsDecoder)
+
+
+pluginDecoder : Decoder Plugin
+pluginDecoder =
+    map8 Plugin
+        (field "vim" string)
+        (field "emacs" string)
+        (field "status" statusDecoder)
+        (field "vimCode" maybeStringDecoder)
+        (field "emacsCode" maybeStringDecoder)
+        (field "vimUrl" maybeStringDecoder)
+        (field "emacsUrl" maybeStringDecoder)
+        (field "note" maybeStringDecoder)
+
+
+maybeStringDecoder : Decoder (Maybe String)
+maybeStringDecoder =
+    Json.Decode.maybe Json.Decode.string
 
 
 emacsDecoder : Decoder (Maybe String)
