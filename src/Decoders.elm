@@ -18,10 +18,10 @@ optionDecoder : Decoder Option
 optionDecoder =
     map5 Option
         (field "vim" string)
-        (field "emacs" emacsDecoder)
-        (field "param" paramDecoder)
+        (field "emacs" maybeStringDecoder)
+        (field "param" maybeStringDecoder)
         (field "status" statusDecoder)
-        (field "emacsDocs" emacsDocsDecoder)
+        (field "emacsDocs" maybeStringDecoder)
 
 
 pluginDecoder : Decoder Plugin
@@ -39,21 +39,6 @@ pluginDecoder =
 
 maybeStringDecoder : Decoder (Maybe String)
 maybeStringDecoder =
-    Json.Decode.maybe Json.Decode.string
-
-
-emacsDecoder : Decoder (Maybe String)
-emacsDecoder =
-    Json.Decode.maybe Json.Decode.string
-
-
-paramDecoder : Decoder (Maybe String)
-paramDecoder =
-    Json.Decode.maybe Json.Decode.string
-
-
-emacsDocsDecoder : Decoder (Maybe String)
-emacsDocsDecoder =
     Json.Decode.maybe Json.Decode.string
 
 
