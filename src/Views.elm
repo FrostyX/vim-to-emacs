@@ -15,6 +15,7 @@ import Bootstrap.ListGroup as ListGroup
 import Bootstrap.Navbar as Navbar
 import Bootstrap.Utilities.Flex as Flex
 import Browser
+import Config exposing (..)
 import Convert exposing (..)
 import Debug
 import FontAwesome.Attributes as Icon
@@ -217,7 +218,7 @@ viewOption option =
             , viewEmacsOptionCommand option
             ]
         , Grid.col [ Col.xs3 ]
-            [ viewDocumentationLinks option
+            [ viewOptionCardLinks option
             ]
         ]
 
@@ -239,7 +240,7 @@ viewPlugin plugin =
             , div [] [ text <| Maybe.withDefault "" plugin.note ]
             ]
         , Grid.col [ Col.xs3 ]
-            [ viewPluginDocumentationLinks plugin
+            [ viewPluginCardLinks plugin
             ]
         ]
 
@@ -332,66 +333,45 @@ viewConvertor model =
         ]
 
 
-viewDocumentationLinks : Option -> Html Msg
-viewDocumentationLinks option =
+viewOptionCardLinks : Option -> Html Msg
+viewOptionCardLinks option =
     ListGroup.custom
-        [ ListGroup.button
-            [ ListGroup.disabled ]
-            [ viewStatus option.status ]
-        , ListGroup.anchor
-            [ ListGroup.attrs [ href <| vimDocumentation option ] ]
-            [ text "Vim documentation" ]
-        , viewEmacsDocumentationLink option
-        , ListGroup.anchor
-            [ ListGroup.attrs [ href "https://github.com/FrostyX/vim-to-emacs/issues" ] ]
-            [ text "Report issue" ]
+        [ viewCardStatus option.status
+        , viewCardLink "Vim documentation" <| Just <| vimDocumentation option
+        , viewCardLink "Emacs documentation" option.emacsDocs
+        , viewCardLink "Report issue" <| Just issuesUrl
         ]
 
 
-viewPluginDocumentationLinks : Plugin -> Html Msg
-viewPluginDocumentationLinks plugin =
+viewPluginCardLinks : Plugin -> Html Msg
+viewPluginCardLinks plugin =
     ListGroup.custom
-        [ ListGroup.button
-            [ ListGroup.disabled ]
-            [ viewStatus plugin.status ]
-        , case plugin.vimUrl of
-            Nothing ->
-                ListGroup.anchor
-                    [ ListGroup.disabled ]
-                    [ text "Vim plugin" ]
-
-            Just value ->
-                ListGroup.anchor
-                    [ ListGroup.attrs [ href value ] ]
-                    [ text "Vim plugin" ]
-        , case plugin.emacsUrl of
-            Nothing ->
-                ListGroup.anchor
-                    [ ListGroup.disabled ]
-                    [ text "Emacs package" ]
-
-            Just value ->
-                ListGroup.anchor
-                    [ ListGroup.attrs [ href value ] ]
-                    [ text "Emacs package" ]
-        , ListGroup.anchor
-            [ ListGroup.attrs [ href "https://github.com/FrostyX/vim-to-emacs/issues" ] ]
-            [ text "Report issue" ]
+        [ viewCardStatus plugin.status
+        , viewCardLink "Vim plugin" plugin.vimUrl
+        , viewCardLink "Emacs package" plugin.emacsUrl
+        , viewCardLink "Report issue" <| Just issuesUrl
         ]
 
 
-viewEmacsDocumentationLink : Option -> ListGroup.CustomItem Msg
-viewEmacsDocumentationLink option =
-    case option.emacsDocs of
+viewCardStatus : Status -> ListGroup.CustomItem Msg
+viewCardStatus status =
+    ListGroup.button
+        [ ListGroup.disabled ]
+        [ viewStatus status ]
+
+
+viewCardLink : String -> Maybe String -> ListGroup.CustomItem Msg
+viewCardLink title url =
+    case url of
         Nothing ->
             ListGroup.anchor
                 [ ListGroup.disabled ]
-                [ text "Emacs documentation" ]
+                [ text title ]
 
-        Just value ->
+        Just justUrl ->
             ListGroup.anchor
-                [ ListGroup.attrs [ href value ] ]
-                [ text "Emacs documentation" ]
+                [ ListGroup.attrs [ href justUrl ] ]
+                [ text title ]
 
 
 viewFooter : Html Msg
