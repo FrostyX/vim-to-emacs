@@ -25,60 +25,118 @@ convertVimToEmacs vimConfig options =
 
 convertOption : String -> Array.Array Option -> String
 convertOption configLine options =
-    if String.startsWith "#" configLine then
-        -- This config line is a comment
-        ";; " ++ removeCommentSigns configLine
+    case parseConfigLine configLine options of
+        Comment line ->
+            ";; " ++ removeCommentSigns configLine
 
-    else if String.filter (\x -> x /= ' ') configLine |> String.isEmpty then
-        -- This config line is only a whitespace
-        configLine
+        Whitespace line ->
+            line
+
+        Unrecognized line ->
+            ";; Unknown alternative to "
+                ++ line
+
+        OptionWithMissingValue option value ->
+            ";; Missing option value, using default\n"
+                ++ convertOptionLine option value
+
+        OptionLine option value ->
+            convertOptionLine option value
+
+
+isComment : String -> Bool
+isComment configLine =
+    configLine
+        |> String.trim
+        |> String.startsWith "#"
+
+
+isWhitespace : String -> Bool
+isWhitespace configLine =
+    configLine
+        |> String.filter (\x -> x /= ' ')
+        |> String.isEmpty
+
+
+findOption : String -> Array.Array Option -> Maybe Option
+findOption name options =
+    options
+        |> Array.filter (\option -> option.vim == name)
+        |> Array.get 0
+
+
+isValueMissing : Option -> Maybe String -> Bool
+isValueMissing option value =
+    -- Is this an option that is supposed to have a value but it is missing?
+    option.param
+        /= Nothing
+        && (value |> Maybe.withDefault "" |> String.isEmpty)
+
+
+defaultedValue : Option -> Maybe String -> Maybe String
+defaultedValue option value =
+    if isValueMissing option value then
+        option.param
+
+    else if option.param == Nothing then
+        Nothing
 
     else
-        -- This config line is some kind of option
+        value |> Maybe.withDefault "" |> removeComment |> String.trim |> Just
+
+
+parseConfigLine : String -> Array.Array Option -> ConfigLine
+parseConfigLine configLine options =
+    if isComment configLine then
+        Comment configLine
+
+    else if isWhitespace configLine then
+        Whitespace configLine
+
+    else
         let
-            split =
-                String.split "=" configLine |> Array.fromList |> Array.map String.trim
-
-            name =
-                split
-                    |> Array.get 0
-                    |> Maybe.withDefault configLine
-                    |> removeComment
-                    |> String.trim
-
-            value =
-                split |> Array.get 1
+            nameValue =
+                parseOptionNameValue configLine
         in
-        case Array.filter (\option -> option.vim == name) options |> Array.get 0 of
+        case findOption nameValue.name options of
             Nothing ->
-                ";; Unknown alternative to " ++ configLine
+                Unrecognized configLine
 
             Just option ->
-                let
-                    -- Is this an option that is supposed to have a value but it is missing?
-                    missingValue =
-                        option.param /= Nothing && (value |> Maybe.withDefault "" |> String.isEmpty)
+                if isValueMissing option nameValue.value then
+                    OptionWithMissingValue option nameValue.value
 
-                    defaultedValue =
-                        if missingValue then
-                            option.param
+                else
+                    OptionLine option nameValue.value
 
-                        else if option.param == Nothing then
-                            Nothing
 
-                        else
-                            value |> Maybe.withDefault "" |> removeComment |> String.trim |> Just
-                in
-                (if missingValue then
-                    ";; Missing option value, using default\n"
+parseOptionNameValue : String -> { name : String, value : Maybe String }
+parseOptionNameValue configLine =
+    let
+        split =
+            String.split "=" configLine
+                |> Array.fromList
+                |> Array.map String.trim
 
-                 else
-                    ""
-                )
-                    ++ interpolate ";; {0}\n{1}\n"
-                        [ parameterizedVimOption option.vim defaultedValue
-                        , parameterizedEmacsOption option defaultedValue
-                        ]
+        name =
+            split
+                |> Array.get 0
+                |> Maybe.withDefault configLine
+                |> removeComment
+                |> String.trim
+
+        value =
+            split |> Array.get 1
+    in
+    { name = name, value = value }
+
+
+convertOptionLine : Option -> Maybe String -> String
+convertOptionLine option value =
+    interpolate ";; {0}\n{1}\n"
+        [ parameterizedVimOption option.vim <| defaultedValue option value
+        , parameterizedEmacsOption option <| defaultedValue option value
+        ]
 
 
 removeComment : String -> String

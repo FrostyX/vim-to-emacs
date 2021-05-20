@@ -48,3 +48,11 @@ type alias Plugin =
     , emacsUrl : Maybe String
     , note : Maybe String
     }
+
+
+type ConfigLine
+    = Whitespace String
+    | Comment String
+    | Unrecognized String
+    | OptionWithMissingValue Option (Maybe String)
+    | OptionLine Option (Maybe String)
